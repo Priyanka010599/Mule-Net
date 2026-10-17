@@ -1,0 +1,97 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Config / environment
+.env
+.env.*
+!.env.example
+
+# Generated data and artifacts — never commit transaction or KYC data
+*.parquet
+out/
+# Exception: Model A/B are real trained, servable artifacts
+# (ml/model_runtime.py), not regenerable derived data like the rest of
+# ml/out/ -- the deployed service needs them, so they are committed. A
+# negation cannot reach into an already-excluded parent (git docs), so
+# ml/out/ itself must be re-included first, then everything in it
+# EXCEPT models/ re-excluded.
+!ml/out/
+ml/out/*
+!ml/out/models/
+
+# Transient Vertex-registration conversion artifact (ml/vertex/register_ab.py
+# regenerates this from the committed model_{a,b,c}.ubj every run) -- not a
+# servable artifact itself, no committed precedent for model_a.bst/model_b.bst
+# either.
+ml/out/models/*.bst
+
+# Secrets and credentials — this is a public repo
+*-key.json
+*_key.json
+service-account*.json
+credentials.json
+secrets/
+*.pem
+*.p12
+*.key
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# IBM AML public benchmark data (Lane D2) — third-party dataset, large,
+# never committed; redownloadable from its own source.
+ml/experiments/public_benchmark/
+
+# IBM AML split.json (Lane D2) — CDLA-Sharing-1.0 publishing the Data or
+# Enhanced Data triggers share-alike (s3); regenerated locally and
+# deterministically by ml/experiments/ibm_aml/make_split.py instead of
+# committed. See that script's EXPECTED_SPLIT_SHA256.
+ml/experiments/ibm_aml/split.json
+
+# Official regulation PDFs — fetched from government sites, never committed.
+# They are third-party Crown/Government copyright, they are large, and they
+# are reproducible from the URLs listed in README.md. docai/ reads them
+# locally; nothing in CI needs them.
+docai/regulations_corpus/
+
+# Operational runbook — resource ids and destructive gcloud commands.
+# Kept on disk, deliberately untracked: a submission repo is the wrong
+# place for a list of things to delete and the ids to delete them by.
+docs/post_judging_cleanup.md
+
+# Confidential Space enclave working files.
+# Digests and evidence are run artefacts, and a plaintext bundle from
+# enclave_send_edges.py --dry-run must never be committed: it is exactly the
+# cross-bank data the enclave exists to keep out of shared storage.
+.enclave-digest-*
+.enclave-evidence/
+.enclave-bundle-*
+.enclave-*.log
+.deploy.log
+
+# Bank-side outbox decrypt keys (enclave/outbox_crypto.py). Real private keys,
+# generated offline by infra/enclave_outbox_keygen.py -- never commit these.
+.enclave-outbox-key-*.bin
+
+# Per-bank flagged account ids (hashed) that drive which accounts
+# enclave/workload.py's ring-finding clusters on for a given run. Not
+# raw PII, but still local operational data -- same "never commit" rule
+# as the rest of this project's enclave working files.
+.enclave-flagged-*.csv
+
+# Scratch VM-name strings left over from ad hoc diagnostics.
+.enclave-diag*-vmname
+.claude/worktrees/
+.claude/agents/
+ml/experiments/public_benchmark/
+mintty.*.png

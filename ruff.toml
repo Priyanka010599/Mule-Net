@@ -1,0 +1,16 @@
+# Lint config for MuleNet. Runtime target is Python 3.11.
+
+target-version = "py311"
+line-length = 100
+
+exclude = [
+    ".venv",
+    "venv",
+    "out",
+    "__pycache__",
+]
+
+[lint]
+# E/F: pycodestyle + pyflakes basics. I: import sorting.
+# UP: pyupgrade, keeps us on modern 3.11 syntax. B: bugbear, catches real defects.
+select = ["E", "F", "I", "UP", "B"]

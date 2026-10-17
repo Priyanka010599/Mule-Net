@@ -1,0 +1,96 @@
+# MuleNet — cross-bank money mule detection (Google Cloud AI Builder Cup, BFSI).
+#
+# Supported runtime is Python 3.11 (Cloud Run base image and CI both pin 3.11).
+# The local dev machine currently runs Python 3.14.5; torch and torch_geometric
+# do not publish cp314 wheels yet, so `pip install .` on 3.14 will try to build
+# from source and most likely fail. Create a 3.11 virtualenv for local work:
+#     py -3.11 -m venv .venv && .venv\Scripts\activate && pip install -e ".[dev]"
+
+[project]
+name = "mulenet"
+version = "0.1.0"
+description = "Cross-bank money mule detection: transaction graph scoring, ring clustering, KYC document reuse detection, and regulation-cited compliance reports on Google Cloud."
+requires-python = ">=3.11"
+
+dependencies = [
+    # modelling
+    "torch",
+    "torch_geometric",
+    "scikit-learn",
+    "xgboost",
+    # data
+    "pandas",
+    "pyarrow",
+    "pillow",
+    # ingest/'s default local sink (ingest/sinks.py DuckDBSink). Imported
+    # lazily there so the module loads without it, but it must still be an
+    # installed dependency: it happened to already be present on one dev
+    # machine from something unrelated, which is why this gap went
+    # unnoticed until a genuinely fresh venv hit ~20 ModuleNotFoundErrors
+    # across ingest/test_app.py and ingest/test_sinks.py.
+    "duckdb",
+    # services
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    # agents
+    "sqlglot",
+    # google cloud
+    "google-cloud-pubsub",
+    "google-cloud-bigquery",
+    # agents/data.py's optional BigQuery-backed DataStore path calls
+    # Client().query(...).to_dataframe(), which raises ImportError at
+    # call time without this -- it is not pulled in by
+    # google-cloud-bigquery itself.
+    "db-dtypes",
+    # Same path, same table.to_dataframe() call: without this,
+    # google-cloud-bigquery falls back to the plain REST endpoint, which
+    # measured ~10x slower pulling all 572,890 transfers rows (minutes,
+    # not the ~18.5s measured with this installed) -- a real regression
+    # against the warm-up latency agents/warm.py and docs/reviewer_notes.md
+    # already measure and document for the parquet path.
+    "google-cloud-bigquery-storage",
+    "google-cloud-alloydb",
+    "google-cloud-aiplatform",
+    "google-cloud-documentai",
+    # enclave/kms.py and infra/enclave_send_edges.py -- observed live, missing
+    # entirely from this list until the Stage 2 edge-send hit ImportError.
+    "google-cloud-storage",
+    "google-cloud-kms",
+    # enclave/live_proof.py: orchestrates the judge-facing live-proof VM
+    # directly via the Compute Engine API (no gcloud CLI in this image).
+    "google-cloud-compute",
+    # Pinned exactly, not floated. agents/service.py is written against
+    # two behaviours of these specific versions: google-adk's synchronous
+    # Runner.run executing the agent on a bare threading.Thread (which is
+    # why provenance is a closure and not a ContextVar), and
+    # get_fast_api_app's signature, which has already changed across
+    # releases. A float here silently invalidates that reasoning.
+    "google-adk==2.9.2",
+    "google-genai==2.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+]
+
+# This is a flat-layout monorepo: 9 top-level directories, each its own
+# package, with no shared src/ root or single top-level package name.
+# Without this, setuptools' automatic discovery finds all 9 and refuses to
+# guess which one is "the" package -- observed live: `pip install -e ".[dev]"`
+# failed with "Multiple top-level packages discovered in a flat-layout" on a
+# fresh venv, even though nothing about the dependency list had changed.
+[tool.setuptools.packages.find]
+include = [
+    "ml*",
+    "ui*",
+    "docai*",
+    "infra*",
+    "agents*",
+    "ingest*",
+    "shared*",
+    "enclave*",
+    "simulator*",
+]
