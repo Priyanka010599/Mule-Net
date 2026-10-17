@@ -1,0 +1,704 @@
+[
+  {
+    "scenario": "full_window",
+    "accounts": 30000,
+    "all_exact": false,
+    "reproduced_features": [
+      "in_degree",
+      "out_degree",
+      "unique_in_counterparties",
+      "unique_out_counterparties",
+      "unique_counterparties",
+      "distinct_counterparty_banks",
+      "amount_in_total",
+      "amount_out_total",
+      "passthrough_ratio",
+      "passthrough_speed_seconds",
+      "round_amount_ratio",
+      "account_age_days"
+    ],
+    "unreproducible_features": {
+      "device_count": "needs simulator table `devices` (not in BigQuery)",
+      "shared_device_count": "needs simulator table `devices` (not in BigQuery)",
+      "document_reuse_count": "needs `kyc_documents` + `kyc_submissions` (not in BigQuery)",
+      "document_reuse_flag": "needs `kyc_documents` + `kyc_submissions` (not in BigQuery)"
+    },
+    "canonical": "ml/features.py (pandas). This SQL is a second implementation.",
+    "queries": [
+      {
+        "scope": "single_bank",
+        "job_id": "e8348bb5-1b25-4d9b-9b0d-d89e11bd9c3b",
+        "rows": 30000,
+        "bytes_processed": 127181580,
+        "bytes_billed": 127926272,
+        "mib_processed": 121.29,
+        "cache_hit": false,
+        "seconds": 237.415,
+        "job_seconds": 124.375,
+        "slot_millis": 1363946,
+        "usd": 0.00072718
+      },
+      {
+        "scope": "cross_bank",
+        "job_id": "659db8d4-fe36-4cbb-9f50-ba862d5ebfdb",
+        "rows": 30000,
+        "bytes_processed": 127181580,
+        "bytes_billed": 127926272,
+        "mib_processed": 121.29,
+        "cache_hit": false,
+        "seconds": 206.185,
+        "job_seconds": 110.024,
+        "slot_millis": 1121319,
+        "usd": 0.00072718
+      }
+    ],
+    "total_usd": 0.00145435,
+    "features": [
+      {
+        "column": "sb_in_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 7.0,
+        "sql_value": 7.0
+      },
+      {
+        "column": "sb_out_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 8.0,
+        "sql_value": 8.0
+      },
+      {
+        "column": "sb_unique_in_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 7.0,
+        "sql_value": 7.0
+      },
+      {
+        "column": "sb_unique_out_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 8.0,
+        "sql_value": 8.0
+      },
+      {
+        "column": "sb_unique_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 15.0,
+        "sql_value": 15.0
+      },
+      {
+        "column": "sb_distinct_counterparty_banks",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 1.0,
+        "sql_value": 1.0
+      },
+      {
+        "column": "sb_amount_in_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 7.275957614183426e-12,
+        "mismatched_rows": 4890,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "98fca4e763de873074918354132198040faa418f5c97202e82d8bbd68e59c524",
+        "pandas_value": 34346.509999999995,
+        "sql_value": 34346.51
+      },
+      {
+        "column": "sb_amount_out_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 2.9103830456733704e-11,
+        "mismatched_rows": 5872,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "2782dab406d1b509a1c00d920b41fa600c8aa8153fc8940e3517cc6f4ce46119",
+        "pandas_value": 216373.16999999998,
+        "sql_value": 216373.17
+      },
+      {
+        "column": "sb_passthrough_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 1.1368683772161603e-13,
+        "mismatched_rows": 7955,
+        "exact": false,
+        "decision_resolution": 1e-09,
+        "worst_account": "e89754f8328b9283efd1f6ec0ecb181098251a8b5795e9af5f3b6a1da431964a",
+        "pandas_value": 732.7013422818793,
+        "sql_value": 732.7013422818792
+      },
+      {
+        "column": "sb_passthrough_speed_seconds",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.0,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 468.0,
+        "sql_value": 468.0
+      },
+      {
+        "column": "sb_round_amount_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1e-09,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 0.0,
+        "sql_value": 0.0
+      },
+      {
+        "column": "sb_account_age_days",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.1574074074074073e-05,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 2289.9441550925926,
+        "sql_value": 2289.9441550925926
+      },
+      {
+        "column": "cb_in_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 9.0,
+        "sql_value": 9.0
+      },
+      {
+        "column": "cb_out_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 15.0,
+        "sql_value": 15.0
+      },
+      {
+        "column": "cb_unique_in_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 9.0,
+        "sql_value": 9.0
+      },
+      {
+        "column": "cb_unique_out_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 15.0,
+        "sql_value": 15.0
+      },
+      {
+        "column": "cb_unique_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 24.0,
+        "sql_value": 24.0
+      },
+      {
+        "column": "cb_distinct_counterparty_banks",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 3.0,
+        "sql_value": 3.0
+      },
+      {
+        "column": "cb_amount_in_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 7.275957614183426e-12,
+        "mismatched_rows": 6171,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "6a8e39016957f345e50bc2dbf4e4806d152ec5f8e93372b0f52378055b342b04",
+        "pandas_value": 33761.840000000004,
+        "sql_value": 33761.84
+      },
+      {
+        "column": "cb_amount_out_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 3.637978807091713e-12,
+        "mismatched_rows": 5057,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "05e1373ef1e9252600908b6cad473d1ed3be5a37a9236aa338b7f216c034926e",
+        "pandas_value": 23338.079999999998,
+        "sql_value": 23338.08
+      },
+      {
+        "column": "cb_passthrough_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 1.1368683772161603e-13,
+        "mismatched_rows": 8641,
+        "exact": false,
+        "decision_resolution": 1e-09,
+        "worst_account": "0525bd313e78657801a21dac53e33a3ea7c8554554357722fd1faa7399cddb2d",
+        "pandas_value": 576.7141104294477,
+        "sql_value": 576.7141104294478
+      },
+      {
+        "column": "cb_passthrough_speed_seconds",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.0,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 468.0,
+        "sql_value": 468.0
+      },
+      {
+        "column": "cb_round_amount_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1e-09,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 0.0,
+        "sql_value": 0.0
+      },
+      {
+        "column": "cb_account_age_days",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.1574074074074073e-05,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 2289.9441550925926,
+        "sql_value": 2289.9441550925926
+      }
+    ],
+    "money_attribution": {
+      "sb_amount_in_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 4890,
+        "pandas_max_abs_error_usd": 7.275957614183426e-12,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      },
+      "sb_amount_out_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 5872,
+        "pandas_max_abs_error_usd": 2.9103830456733704e-11,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      },
+      "cb_amount_in_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 6171,
+        "pandas_max_abs_error_usd": 7.275957614183426e-12,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      },
+      "cb_amount_out_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 5057,
+        "pandas_max_abs_error_usd": 3.637978807091713e-12,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      }
+    }
+  },
+  {
+    "scenario": "staggered",
+    "accounts": 30000,
+    "all_exact": false,
+    "reproduced_features": [
+      "in_degree",
+      "out_degree",
+      "unique_in_counterparties",
+      "unique_out_counterparties",
+      "unique_counterparties",
+      "distinct_counterparty_banks",
+      "amount_in_total",
+      "amount_out_total",
+      "passthrough_ratio",
+      "passthrough_speed_seconds",
+      "round_amount_ratio",
+      "account_age_days"
+    ],
+    "unreproducible_features": {
+      "device_count": "needs simulator table `devices` (not in BigQuery)",
+      "shared_device_count": "needs simulator table `devices` (not in BigQuery)",
+      "document_reuse_count": "needs `kyc_documents` + `kyc_submissions` (not in BigQuery)",
+      "document_reuse_flag": "needs `kyc_documents` + `kyc_submissions` (not in BigQuery)"
+    },
+    "canonical": "ml/features.py (pandas). This SQL is a second implementation.",
+    "queries": [
+      {
+        "scope": "single_bank",
+        "job_id": "dca70d0e-a4aa-4176-9daf-8f10b8405b66",
+        "rows": 30000,
+        "bytes_processed": 127181580,
+        "bytes_billed": 127926272,
+        "mib_processed": 121.29,
+        "cache_hit": false,
+        "seconds": 207.01,
+        "job_seconds": 116.957,
+        "slot_millis": 1531660,
+        "usd": 0.00072718
+      },
+      {
+        "scope": "cross_bank",
+        "job_id": "71a7c119-7983-457b-9fe9-736d4887b81c",
+        "rows": 30000,
+        "bytes_processed": 127181580,
+        "bytes_billed": 127926272,
+        "mib_processed": 121.29,
+        "cache_hit": false,
+        "seconds": 180.981,
+        "job_seconds": 91.826,
+        "slot_millis": 1237338,
+        "usd": 0.00072718
+      }
+    ],
+    "total_usd": 0.00145435,
+    "features": [
+      {
+        "column": "sb_in_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 5.0,
+        "sql_value": 5.0
+      },
+      {
+        "column": "sb_out_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 4.0,
+        "sql_value": 4.0
+      },
+      {
+        "column": "sb_unique_in_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 5.0,
+        "sql_value": 5.0
+      },
+      {
+        "column": "sb_unique_out_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 4.0,
+        "sql_value": 4.0
+      },
+      {
+        "column": "sb_unique_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 9.0,
+        "sql_value": 9.0
+      },
+      {
+        "column": "sb_distinct_counterparty_banks",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 1.0,
+        "sql_value": 1.0
+      },
+      {
+        "column": "sb_amount_in_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 3.637978807091713e-12,
+        "mismatched_rows": 2673,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "2c3722a4563c59e32895b4b17daeca9a48450086cbbd53ba0e97212ae4afefc3",
+        "pandas_value": 18711.809999999998,
+        "sql_value": 18711.81
+      },
+      {
+        "column": "sb_amount_out_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 1.4551915228366852e-11,
+        "mismatched_rows": 4313,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "6b735d1943c66c788f0bbc7eafb0619528df35177ab5e2700dda6ff4e8dbc2a0",
+        "pandas_value": 124228.70999999999,
+        "sql_value": 124228.71
+      },
+      {
+        "column": "sb_passthrough_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 5.684341886080802e-14,
+        "mismatched_rows": 4663,
+        "exact": false,
+        "decision_resolution": 1e-09,
+        "worst_account": "2e484c770d01885cb3823ef71517fb09116a5fd0e749ecea5eb8e0219924f933",
+        "pandas_value": 267.94648719632306,
+        "sql_value": 267.946487196323
+      },
+      {
+        "column": "sb_passthrough_speed_seconds",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.0,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 468.0,
+        "sql_value": 468.0
+      },
+      {
+        "column": "sb_round_amount_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1e-09,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 0.0,
+        "sql_value": 0.0
+      },
+      {
+        "column": "sb_account_age_days",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.1574074074074073e-05,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 2268.6942780671297,
+        "sql_value": 2268.6942780671297
+      },
+      {
+        "column": "cb_in_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 6.0,
+        "sql_value": 6.0
+      },
+      {
+        "column": "cb_out_degree",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 6.0,
+        "sql_value": 6.0
+      },
+      {
+        "column": "cb_unique_in_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 6.0,
+        "sql_value": 6.0
+      },
+      {
+        "column": "cb_unique_out_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 6.0,
+        "sql_value": 6.0
+      },
+      {
+        "column": "cb_unique_counterparties",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 12.0,
+        "sql_value": 12.0
+      },
+      {
+        "column": "cb_distinct_counterparty_banks",
+        "dtype": "int64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": null,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 3.0,
+        "sql_value": 3.0
+      },
+      {
+        "column": "cb_amount_in_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 3.637978807091713e-12,
+        "mismatched_rows": 4119,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "02f45c9359ee5d57bdee4799f41c451a93bab9160a0fa5307a0b189e40284cb9",
+        "pandas_value": 18143.559999999998,
+        "sql_value": 18143.56
+      },
+      {
+        "column": "cb_amount_out_total",
+        "dtype": "NUMERIC/Decimal",
+        "max_abs_delta": 5.820766091346741e-11,
+        "mismatched_rows": 4697,
+        "exact": false,
+        "decision_resolution": 0.01,
+        "worst_account": "5b3698c1d21e703da74ad366622bef6470d91c6b3fccb34c26c1a5923d4af75f",
+        "pandas_value": 457782.77999999997,
+        "sql_value": 457782.78
+      },
+      {
+        "column": "cb_passthrough_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 1.1368683772161603e-13,
+        "mismatched_rows": 6386,
+        "exact": false,
+        "decision_resolution": 1e-09,
+        "worst_account": "ec3f3822a596ca0f0f8a1a9b82ca3988e5cdca7a9e0468410e24aaf630bb3b4c",
+        "pandas_value": 516.2714893617022,
+        "sql_value": 516.271489361702
+      },
+      {
+        "column": "cb_passthrough_speed_seconds",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.0,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 468.0,
+        "sql_value": 468.0
+      },
+      {
+        "column": "cb_round_amount_ratio",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1e-09,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 0.0,
+        "sql_value": 0.0
+      },
+      {
+        "column": "cb_account_age_days",
+        "dtype": "float64",
+        "max_abs_delta": 0.0,
+        "mismatched_rows": 0,
+        "exact": true,
+        "decision_resolution": 1.1574074074074073e-05,
+        "worst_account": "0003eba4dc2f59749c5ad1990dd73659f6388283f5552009fd3f31e93e029f75",
+        "pandas_value": 2268.6942780671297,
+        "sql_value": 2268.6942780671297
+      }
+    ],
+    "money_attribution": {
+      "sb_amount_in_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 2673,
+        "pandas_max_abs_error_usd": 3.637978807091713e-12,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      },
+      "sb_amount_out_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 4313,
+        "pandas_max_abs_error_usd": 1.4551915228366852e-11,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      },
+      "cb_amount_in_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 4119,
+        "pandas_max_abs_error_usd": 3.637978807091713e-12,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      },
+      "cb_amount_out_total": {
+        "sql_numeric_vs_exact_decimal_mismatched_rows": 0,
+        "sql_is_exact": true,
+        "pandas_float64_vs_exact_decimal_mismatched_rows": 4697,
+        "pandas_max_abs_error_usd": 5.820766091346741e-11,
+        "cause": "ml.features._edge_events casts Decimal NUMERIC(15,2) to float64 before summing; the error is in the per-value cast, not the summation order"
+      }
+    }
+  }
+]

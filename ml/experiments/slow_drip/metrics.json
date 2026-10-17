@@ -1,0 +1,1435 @@
+{
+  "experiment": "slow_drip",
+  "design": {
+    "seed": 42,
+    "overlay_seed": 20250202,
+    "overlay_span_mix_1_2_3_banks": [
+      0.0,
+      0.5,
+      0.5
+    ],
+    "velocity_max_seconds_from_rule": 3600.0,
+    "drip_delay_range_seconds": [
+      7200,
+      21600
+    ],
+    "drip_chunk_spacing_range_seconds": [
+      5400,
+      10800
+    ],
+    "amount_cap": 118.00000000000004,
+    "budget_fraction_per_bank": 0.01,
+    "isolation_forest_params": {
+      "n_estimators": 300,
+      "max_samples": 256,
+      "contamination": "auto",
+      "random_state": 42
+    },
+    "ring_caught_definition": "ring caught = at least one pass-through member (mule/collector) alerted",
+    "false_alert_definition": "alerted account whose role is not mule/collector/source",
+    "thresholds": "score-based detectors: top 1% of each bank's accounts (ceil) chosen without labels; second budget = per-bank alert count of the velocity rule in the same world; rule uses its fixed shipped constants",
+    "folds": "ml.evaluate.fold_assignment(frame, 42), 5 grouped-ring folds, OOF"
+  },
+  "worlds": {
+    "canonical": {
+      "accounts": 30000,
+      "passthrough_accounts": 712,
+      "budget_1pct_per_bank": {
+        "BANK_A": 100,
+        "BANK_B": 100,
+        "BANK_C": 100
+      },
+      "detectors": {
+        "single_bank": {
+          "velocity_rule": {
+            "threshold": "fixed shipped constants (ml/rule.py); not tuned here",
+            "alerts_per_bank": {
+              "BANK_A": 36,
+              "BANK_B": 32,
+              "BANK_C": 36
+            },
+            "alerts": 104,
+            "rings": 120,
+            "rings_caught": 45,
+            "ring_recall": 0.375,
+            "rings_caught_majority": 8,
+            "ring_recall_majority": 0.06666666666666667,
+            "passthrough_accounts_caught": 75,
+            "passthrough_account_recall": 0.10533707865168539,
+            "mule_account_recall": 0.08614864864864864,
+            "collector_account_recall": 0.2,
+            "source_alerts": 0,
+            "false_alerts": 29,
+            "false_alerts_per_ring_caught": 0.6444444444444445,
+            "by_pattern": {
+              "fast_passthrough_only": {
+                "rings": 30,
+                "caught": 15,
+                "recall": 0.5
+              },
+              "mixed": {
+                "rings": 30,
+                "caught": 13,
+                "recall": 0.43333333333333335
+              },
+              "reused_document": {
+                "rings": 30,
+                "caught": 9,
+                "recall": 0.3
+              },
+              "shared_device": {
+                "rings": 30,
+                "caught": 8,
+                "recall": 0.26666666666666666
+              }
+            },
+            "by_span": {
+              "1": {
+                "rings": 36,
+                "caught": 22,
+                "recall": 0.6111111111111112
+              },
+              "2": {
+                "rings": 48,
+                "caught": 16,
+                "recall": 0.3333333333333333
+              },
+              "3": {
+                "rings": 36,
+                "caught": 7,
+                "recall": 0.19444444444444445
+              }
+            }
+          },
+          "isolation_forest": {
+            "ranking": {
+              "pr_auc": 0.179537202285604,
+              "roc_auc": 0.8885821339567688,
+              "prevalence": 0.023733333333333332
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 64,
+              "ring_recall": 0.5333333333333333,
+              "rings_caught_majority": 8,
+              "ring_recall_majority": 0.06666666666666667,
+              "passthrough_accounts_caught": 92,
+              "passthrough_account_recall": 0.12921348314606743,
+              "mule_account_recall": 0.05405405405405406,
+              "collector_account_recall": 0.5,
+              "source_alerts": 2,
+              "false_alerts": 206,
+              "false_alerts_per_ring_caught": 3.21875,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 9,
+                  "recall": 0.3
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 18,
+                  "recall": 0.6
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 20,
+                  "recall": 0.6666666666666666
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 17,
+                  "recall": 0.5666666666666667
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 24,
+                  "recall": 0.6666666666666666
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 27,
+                  "recall": 0.5625
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 13,
+                  "recall": 0.3611111111111111
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 36,
+                "BANK_B": 32,
+                "BANK_C": 36
+              },
+              "alerts": 104,
+              "rings": 120,
+              "rings_caught": 39,
+              "ring_recall": 0.325,
+              "rings_caught_majority": 1,
+              "ring_recall_majority": 0.008333333333333333,
+              "passthrough_accounts_caught": 39,
+              "passthrough_account_recall": 0.054775280898876406,
+              "mule_account_recall": 0.0016891891891891893,
+              "collector_account_recall": 0.31666666666666665,
+              "source_alerts": 0,
+              "false_alerts": 65,
+              "false_alerts_per_ring_caught": 1.6666666666666667,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 4,
+                  "recall": 0.13333333333333333
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 14,
+                  "recall": 0.4666666666666667
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 14,
+                  "recall": 0.4666666666666667
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 7,
+                  "recall": 0.23333333333333334
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 16,
+                  "recall": 0.4444444444444444
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 18,
+                  "recall": 0.375
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 5,
+                  "recall": 0.1388888888888889
+                }
+              }
+            }
+          },
+          "xgboost_oof": {
+            "ranking": {
+              "pr_auc": 0.9705137262576413,
+              "roc_auc": 0.9956892169665683,
+              "prevalence": 0.023733333333333332
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 97,
+              "ring_recall": 0.8083333333333333,
+              "rings_caught_majority": 50,
+              "ring_recall_majority": 0.4166666666666667,
+              "passthrough_accounts_caught": 300,
+              "passthrough_account_recall": 0.42134831460674155,
+              "mule_account_recall": 0.44594594594594594,
+              "collector_account_recall": 0.3,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 23,
+                  "recall": 0.7666666666666667
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 26,
+                  "recall": 0.8666666666666667
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 24,
+                  "recall": 0.8
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 24,
+                  "recall": 0.8
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 35,
+                  "recall": 0.9722222222222222
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 39,
+                  "recall": 0.8125
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 23,
+                  "recall": 0.6388888888888888
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 36,
+                "BANK_B": 32,
+                "BANK_C": 36
+              },
+              "alerts": 104,
+              "rings": 120,
+              "rings_caught": 56,
+              "ring_recall": 0.4666666666666667,
+              "rings_caught_majority": 14,
+              "ring_recall_majority": 0.11666666666666667,
+              "passthrough_accounts_caught": 104,
+              "passthrough_account_recall": 0.14606741573033707,
+              "mule_account_recall": 0.17567567567567569,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 6,
+                  "recall": 0.2
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 18,
+                  "recall": 0.6
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 18,
+                  "recall": 0.6
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 14,
+                  "recall": 0.4666666666666667
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 27,
+                  "recall": 0.75
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 24,
+                  "recall": 0.5
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 5,
+                  "recall": 0.1388888888888889
+                }
+              }
+            }
+          }
+        },
+        "cross_bank": {
+          "velocity_rule": {
+            "threshold": "fixed shipped constants (ml/rule.py); not tuned here",
+            "alerts_per_bank": {
+              "BANK_A": 233,
+              "BANK_B": 245,
+              "BANK_C": 198
+            },
+            "alerts": 676,
+            "rings": 120,
+            "rings_caught": 120,
+            "ring_recall": 1.0,
+            "rings_caught_majority": 119,
+            "ring_recall_majority": 0.9916666666666667,
+            "passthrough_accounts_caught": 625,
+            "passthrough_account_recall": 0.8778089887640449,
+            "mule_account_recall": 0.9881756756756757,
+            "collector_account_recall": 0.3333333333333333,
+            "source_alerts": 0,
+            "false_alerts": 51,
+            "false_alerts_per_ring_caught": 0.425,
+            "by_pattern": {
+              "fast_passthrough_only": {
+                "rings": 30,
+                "caught": 30,
+                "recall": 1.0
+              },
+              "mixed": {
+                "rings": 30,
+                "caught": 30,
+                "recall": 1.0
+              },
+              "reused_document": {
+                "rings": 30,
+                "caught": 30,
+                "recall": 1.0
+              },
+              "shared_device": {
+                "rings": 30,
+                "caught": 30,
+                "recall": 1.0
+              }
+            },
+            "by_span": {
+              "1": {
+                "rings": 36,
+                "caught": 36,
+                "recall": 1.0
+              },
+              "2": {
+                "rings": 48,
+                "caught": 48,
+                "recall": 1.0
+              },
+              "3": {
+                "rings": 36,
+                "caught": 36,
+                "recall": 1.0
+              }
+            }
+          },
+          "isolation_forest": {
+            "ranking": {
+              "pr_auc": 0.24185359102124845,
+              "roc_auc": 0.9364007366594134,
+              "prevalence": 0.023733333333333332
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 71,
+              "ring_recall": 0.5916666666666667,
+              "rings_caught_majority": 0,
+              "ring_recall_majority": 0.0,
+              "passthrough_accounts_caught": 75,
+              "passthrough_account_recall": 0.10533707865168539,
+              "mule_account_recall": 0.006756756756756757,
+              "collector_account_recall": 0.5916666666666667,
+              "source_alerts": 0,
+              "false_alerts": 225,
+              "false_alerts_per_ring_caught": 3.1690140845070425,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 9,
+                  "recall": 0.3
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 24,
+                  "recall": 0.8
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 19,
+                  "recall": 0.6333333333333333
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 19,
+                  "recall": 0.6333333333333333
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 18,
+                  "recall": 0.5
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 31,
+                  "recall": 0.6458333333333334
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 22,
+                  "recall": 0.6111111111111112
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 233,
+                "BANK_B": 245,
+                "BANK_C": 198
+              },
+              "alerts": 676,
+              "rings": 120,
+              "rings_caught": 84,
+              "ring_recall": 0.7,
+              "rings_caught_majority": 1,
+              "ring_recall_majority": 0.008333333333333333,
+              "passthrough_accounts_caught": 111,
+              "passthrough_account_recall": 0.15589887640449437,
+              "mule_account_recall": 0.04560810810810811,
+              "collector_account_recall": 0.7,
+              "source_alerts": 1,
+              "false_alerts": 564,
+              "false_alerts_per_ring_caught": 6.714285714285714,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 14,
+                  "recall": 0.4666666666666667
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 24,
+                  "recall": 0.8
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 23,
+                  "recall": 0.7666666666666667
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 23,
+                  "recall": 0.7666666666666667
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 23,
+                  "recall": 0.6388888888888888
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 34,
+                  "recall": 0.7083333333333334
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 27,
+                  "recall": 0.75
+                }
+              }
+            }
+          },
+          "xgboost_oof": {
+            "ranking": {
+              "pr_auc": 0.9992185168822797,
+              "roc_auc": 0.9999575601772709,
+              "prevalence": 0.023733333333333332
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 100,
+              "ring_recall": 0.8333333333333334,
+              "rings_caught_majority": 59,
+              "ring_recall_majority": 0.49166666666666664,
+              "passthrough_accounts_caught": 300,
+              "passthrough_account_recall": 0.42134831460674155,
+              "mule_account_recall": 0.5067567567567568,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 24,
+                  "recall": 0.8
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 28,
+                  "recall": 0.9333333333333333
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 26,
+                  "recall": 0.8666666666666667
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 22,
+                  "recall": 0.7333333333333333
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 30,
+                  "recall": 0.8333333333333334
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 41,
+                  "recall": 0.8541666666666666
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 29,
+                  "recall": 0.8055555555555556
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 233,
+                "BANK_B": 245,
+                "BANK_C": 198
+              },
+              "alerts": 676,
+              "rings": 120,
+              "rings_caught": 120,
+              "ring_recall": 1.0,
+              "rings_caught_majority": 120,
+              "ring_recall_majority": 1.0,
+              "passthrough_accounts_caught": 676,
+              "passthrough_account_recall": 0.949438202247191,
+              "mule_account_recall": 0.9695945945945946,
+              "collector_account_recall": 0.85,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 30,
+                  "recall": 1.0
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 30,
+                  "recall": 1.0
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 30,
+                  "recall": 1.0
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 30,
+                  "recall": 1.0
+                }
+              },
+              "by_span": {
+                "1": {
+                  "rings": 36,
+                  "caught": 36,
+                  "recall": 1.0
+                },
+                "2": {
+                  "rings": 48,
+                  "caught": 48,
+                  "recall": 1.0
+                },
+                "3": {
+                  "rings": 36,
+                  "caught": 36,
+                  "recall": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "slow_drip_overlay": {
+      "accounts": 30000,
+      "passthrough_accounts": 748,
+      "budget_1pct_per_bank": {
+        "BANK_A": 100,
+        "BANK_B": 100,
+        "BANK_C": 100
+      },
+      "detectors": {
+        "single_bank": {
+          "velocity_rule": {
+            "threshold": "fixed shipped constants (ml/rule.py); not tuned here",
+            "alerts_per_bank": {
+              "BANK_A": 15,
+              "BANK_B": 12,
+              "BANK_C": 14
+            },
+            "alerts": 41,
+            "rings": 120,
+            "rings_caught": 13,
+            "ring_recall": 0.10833333333333334,
+            "rings_caught_majority": 0,
+            "ring_recall_majority": 0.0,
+            "passthrough_accounts_caught": 13,
+            "passthrough_account_recall": 0.017379679144385027,
+            "mule_account_recall": 0.0,
+            "collector_account_recall": 0.10833333333333334,
+            "source_alerts": 0,
+            "false_alerts": 28,
+            "false_alerts_per_ring_caught": 2.1538461538461537,
+            "by_pattern": {
+              "fast_passthrough_only": {
+                "rings": 30,
+                "caught": 3,
+                "recall": 0.1
+              },
+              "mixed": {
+                "rings": 30,
+                "caught": 7,
+                "recall": 0.23333333333333334
+              },
+              "reused_document": {
+                "rings": 30,
+                "caught": 1,
+                "recall": 0.03333333333333333
+              },
+              "shared_device": {
+                "rings": 30,
+                "caught": 2,
+                "recall": 0.06666666666666667
+              }
+            },
+            "by_span": {
+              "2": {
+                "rings": 60,
+                "caught": 7,
+                "recall": 0.11666666666666667
+              },
+              "3": {
+                "rings": 60,
+                "caught": 6,
+                "recall": 0.1
+              }
+            }
+          },
+          "isolation_forest": {
+            "ranking": {
+              "pr_auc": 0.1302247316933207,
+              "roc_auc": 0.8671089997228583,
+              "prevalence": 0.02493333333333333
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 50,
+              "ring_recall": 0.4166666666666667,
+              "rings_caught_majority": 2,
+              "ring_recall_majority": 0.016666666666666666,
+              "passthrough_accounts_caught": 62,
+              "passthrough_account_recall": 0.08288770053475936,
+              "mule_account_recall": 0.01910828025477707,
+              "collector_account_recall": 0.4166666666666667,
+              "source_alerts": 0,
+              "false_alerts": 238,
+              "false_alerts_per_ring_caught": 4.76,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 5,
+                  "recall": 0.16666666666666666
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 15,
+                  "recall": 0.5
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 17,
+                  "recall": 0.5666666666666667
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 13,
+                  "recall": 0.43333333333333335
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 27,
+                  "recall": 0.45
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 23,
+                  "recall": 0.38333333333333336
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 15,
+                "BANK_B": 12,
+                "BANK_C": 14
+              },
+              "alerts": 41,
+              "rings": 120,
+              "rings_caught": 3,
+              "ring_recall": 0.025,
+              "rings_caught_majority": 0,
+              "ring_recall_majority": 0.0,
+              "passthrough_accounts_caught": 3,
+              "passthrough_account_recall": 0.004010695187165776,
+              "mule_account_recall": 0.0,
+              "collector_account_recall": 0.025,
+              "source_alerts": 0,
+              "false_alerts": 38,
+              "false_alerts_per_ring_caught": 12.666666666666666,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 0,
+                  "recall": 0.0
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 1,
+                  "recall": 0.03333333333333333
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 2,
+                  "recall": 0.06666666666666667
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 0,
+                  "recall": 0.0
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 3,
+                  "recall": 0.05
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 0,
+                  "recall": 0.0
+                }
+              }
+            }
+          },
+          "xgboost_oof": {
+            "ranking": {
+              "pr_auc": 0.9801872199787941,
+              "roc_auc": 0.9984516804372259,
+              "prevalence": 0.02493333333333333
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 103,
+              "ring_recall": 0.8583333333333333,
+              "rings_caught_majority": 47,
+              "ring_recall_majority": 0.39166666666666666,
+              "passthrough_accounts_caught": 300,
+              "passthrough_account_recall": 0.40106951871657753,
+              "mule_account_recall": 0.4124203821656051,
+              "collector_account_recall": 0.3416666666666667,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 23,
+                  "recall": 0.7666666666666667
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 25,
+                  "recall": 0.8333333333333334
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 27,
+                  "recall": 0.9
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 28,
+                  "recall": 0.9333333333333333
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 55,
+                  "recall": 0.9166666666666666
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 48,
+                  "recall": 0.8
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 15,
+                "BANK_B": 12,
+                "BANK_C": 14
+              },
+              "alerts": 41,
+              "rings": 120,
+              "rings_caught": 31,
+              "ring_recall": 0.25833333333333336,
+              "rings_caught_majority": 0,
+              "ring_recall_majority": 0.0,
+              "passthrough_accounts_caught": 41,
+              "passthrough_account_recall": 0.05481283422459893,
+              "mule_account_recall": 0.06528662420382166,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 4,
+                  "recall": 0.13333333333333333
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 7,
+                  "recall": 0.23333333333333334
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 13,
+                  "recall": 0.43333333333333335
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 7,
+                  "recall": 0.23333333333333334
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 23,
+                  "recall": 0.38333333333333336
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 8,
+                  "recall": 0.13333333333333333
+                }
+              }
+            }
+          },
+          "xgboost_canonical_transfer": {
+            "ranking": {
+              "pr_auc": 0.9800874959484617,
+              "roc_auc": 0.9983146177307863,
+              "prevalence": 0.02493333333333333
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 99,
+              "ring_recall": 0.825,
+              "rings_caught_majority": 46,
+              "ring_recall_majority": 0.38333333333333336,
+              "passthrough_accounts_caught": 300,
+              "passthrough_account_recall": 0.40106951871657753,
+              "mule_account_recall": 0.3996815286624204,
+              "collector_account_recall": 0.4083333333333333,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 25,
+                  "recall": 0.8333333333333334
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 25,
+                  "recall": 0.8333333333333334
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 21,
+                  "recall": 0.7
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 28,
+                  "recall": 0.9333333333333333
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 53,
+                  "recall": 0.8833333333333333
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 46,
+                  "recall": 0.7666666666666667
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 15,
+                "BANK_B": 12,
+                "BANK_C": 14
+              },
+              "alerts": 41,
+              "rings": 120,
+              "rings_caught": 27,
+              "ring_recall": 0.225,
+              "rings_caught_majority": 1,
+              "ring_recall_majority": 0.008333333333333333,
+              "passthrough_accounts_caught": 41,
+              "passthrough_account_recall": 0.05481283422459893,
+              "mule_account_recall": 0.06528662420382166,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 3,
+                  "recall": 0.1
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 6,
+                  "recall": 0.2
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 9,
+                  "recall": 0.3
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 9,
+                  "recall": 0.3
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 22,
+                  "recall": 0.36666666666666664
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 5,
+                  "recall": 0.08333333333333333
+                }
+              }
+            }
+          }
+        },
+        "cross_bank": {
+          "velocity_rule": {
+            "threshold": "fixed shipped constants (ml/rule.py); not tuned here",
+            "alerts_per_bank": {
+              "BANK_A": 52,
+              "BANK_B": 52,
+              "BANK_C": 66
+            },
+            "alerts": 170,
+            "rings": 120,
+            "rings_caught": 81,
+            "ring_recall": 0.675,
+            "rings_caught_majority": 6,
+            "ring_recall_majority": 0.05,
+            "passthrough_accounts_caught": 120,
+            "passthrough_account_recall": 0.16042780748663102,
+            "mule_account_recall": 0.12261146496815287,
+            "collector_account_recall": 0.35833333333333334,
+            "source_alerts": 0,
+            "false_alerts": 50,
+            "false_alerts_per_ring_caught": 0.6172839506172839,
+            "by_pattern": {
+              "fast_passthrough_only": {
+                "rings": 30,
+                "caught": 18,
+                "recall": 0.6
+              },
+              "mixed": {
+                "rings": 30,
+                "caught": 20,
+                "recall": 0.6666666666666666
+              },
+              "reused_document": {
+                "rings": 30,
+                "caught": 19,
+                "recall": 0.6333333333333333
+              },
+              "shared_device": {
+                "rings": 30,
+                "caught": 24,
+                "recall": 0.8
+              }
+            },
+            "by_span": {
+              "2": {
+                "rings": 60,
+                "caught": 42,
+                "recall": 0.7
+              },
+              "3": {
+                "rings": 60,
+                "caught": 39,
+                "recall": 0.65
+              }
+            }
+          },
+          "isolation_forest": {
+            "ranking": {
+              "pr_auc": 0.24119539494752845,
+              "roc_auc": 0.9267810473766226,
+              "prevalence": 0.02493333333333333
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 72,
+              "ring_recall": 0.6,
+              "rings_caught_majority": 1,
+              "ring_recall_majority": 0.008333333333333333,
+              "passthrough_accounts_caught": 76,
+              "passthrough_account_recall": 0.10160427807486631,
+              "mule_account_recall": 0.007961783439490446,
+              "collector_account_recall": 0.5916666666666667,
+              "source_alerts": 0,
+              "false_alerts": 224,
+              "false_alerts_per_ring_caught": 3.111111111111111,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 9,
+                  "recall": 0.3
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 23,
+                  "recall": 0.7666666666666667
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 20,
+                  "recall": 0.6666666666666666
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 20,
+                  "recall": 0.6666666666666666
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 33,
+                  "recall": 0.55
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 39,
+                  "recall": 0.65
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 52,
+                "BANK_B": 52,
+                "BANK_C": 66
+              },
+              "alerts": 170,
+              "rings": 120,
+              "rings_caught": 68,
+              "ring_recall": 0.5666666666666667,
+              "rings_caught_majority": 1,
+              "ring_recall_majority": 0.008333333333333333,
+              "passthrough_accounts_caught": 71,
+              "passthrough_account_recall": 0.09491978609625669,
+              "mule_account_recall": 0.006369426751592357,
+              "collector_account_recall": 0.5583333333333333,
+              "source_alerts": 0,
+              "false_alerts": 99,
+              "false_alerts_per_ring_caught": 1.4558823529411764,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 6,
+                  "recall": 0.2
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 22,
+                  "recall": 0.7333333333333333
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 20,
+                  "recall": 0.6666666666666666
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 20,
+                  "recall": 0.6666666666666666
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 32,
+                  "recall": 0.5333333333333333
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 36,
+                  "recall": 0.6
+                }
+              }
+            }
+          },
+          "xgboost_oof": {
+            "ranking": {
+              "pr_auc": 0.998439924709848,
+              "roc_auc": 0.9999021960014068,
+              "prevalence": 0.02493333333333333
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 107,
+              "ring_recall": 0.8916666666666667,
+              "rings_caught_majority": 51,
+              "ring_recall_majority": 0.425,
+              "passthrough_accounts_caught": 300,
+              "passthrough_account_recall": 0.40106951871657753,
+              "mule_account_recall": 0.47770700636942676,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 27,
+                  "recall": 0.9
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 25,
+                  "recall": 0.8333333333333334
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 28,
+                  "recall": 0.9333333333333333
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 27,
+                  "recall": 0.9
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 51,
+                  "recall": 0.85
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 56,
+                  "recall": 0.9333333333333333
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 52,
+                "BANK_B": 52,
+                "BANK_C": 66
+              },
+              "alerts": 170,
+              "rings": 120,
+              "rings_caught": 81,
+              "ring_recall": 0.675,
+              "rings_caught_majority": 13,
+              "ring_recall_majority": 0.10833333333333334,
+              "passthrough_accounts_caught": 170,
+              "passthrough_account_recall": 0.22727272727272727,
+              "mule_account_recall": 0.27070063694267515,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 19,
+                  "recall": 0.6333333333333333
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 19,
+                  "recall": 0.6333333333333333
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 22,
+                  "recall": 0.7333333333333333
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 21,
+                  "recall": 0.7
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 40,
+                  "recall": 0.6666666666666666
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 41,
+                  "recall": 0.6833333333333333
+                }
+              }
+            }
+          },
+          "xgboost_canonical_transfer": {
+            "ranking": {
+              "pr_auc": 0.9998171141867748,
+              "roc_auc": 0.9999947898804489,
+              "prevalence": 0.02493333333333333
+            },
+            "budget_1pct_per_bank": {
+              "alerts": 300,
+              "rings": 120,
+              "rings_caught": 111,
+              "ring_recall": 0.925,
+              "rings_caught_majority": 52,
+              "ring_recall_majority": 0.43333333333333335,
+              "passthrough_accounts_caught": 300,
+              "passthrough_account_recall": 0.40106951871657753,
+              "mule_account_recall": 0.4729299363057325,
+              "collector_account_recall": 0.025,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 28,
+                  "recall": 0.9333333333333333
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 26,
+                  "recall": 0.8666666666666667
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 30,
+                  "recall": 1.0
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 27,
+                  "recall": 0.9
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 53,
+                  "recall": 0.8833333333333333
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 58,
+                  "recall": 0.9666666666666667
+                }
+              }
+            },
+            "budget_matched_to_rule": {
+              "alerts_per_bank": {
+                "BANK_A": 52,
+                "BANK_B": 52,
+                "BANK_C": 66
+              },
+              "alerts": 170,
+              "rings": 120,
+              "rings_caught": 89,
+              "ring_recall": 0.7416666666666667,
+              "rings_caught_majority": 11,
+              "ring_recall_majority": 0.09166666666666666,
+              "passthrough_accounts_caught": 170,
+              "passthrough_account_recall": 0.22727272727272727,
+              "mule_account_recall": 0.27070063694267515,
+              "collector_account_recall": 0.0,
+              "source_alerts": 0,
+              "false_alerts": 0,
+              "false_alerts_per_ring_caught": 0.0,
+              "by_pattern": {
+                "fast_passthrough_only": {
+                  "rings": 30,
+                  "caught": 20,
+                  "recall": 0.6666666666666666
+                },
+                "mixed": {
+                  "rings": 30,
+                  "caught": 22,
+                  "recall": 0.7333333333333333
+                },
+                "reused_document": {
+                  "rings": 30,
+                  "caught": 24,
+                  "recall": 0.8
+                },
+                "shared_device": {
+                  "rings": 30,
+                  "caught": 23,
+                  "recall": 0.7666666666666667
+                }
+              },
+              "by_span": {
+                "2": {
+                  "rings": 60,
+                  "caught": 44,
+                  "recall": 0.7333333333333333
+                },
+                "3": {
+                  "rings": 60,
+                  "caught": 45,
+                  "recall": 0.75
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

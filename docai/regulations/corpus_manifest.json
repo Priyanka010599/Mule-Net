@@ -1,0 +1,54 @@
+{
+  "_comment": [
+    "The official AML/KYC regulation corpus indexed into Vertex AI Search.",
+    "The PDFs themselves are gitignored (docai/regulations_corpus/); this file",
+    "is the metadata that travels with them: it supplies the document title and",
+    "the official issuing-authority URL that every returned passage must carry,",
+    "and it is the closed set of documents a citation may name. A citation whose",
+    "document is not in this file did not come from this corpus.",
+    "Fetch instructions and checksums-by-size are in the repo README under",
+    "'Regulation corpus'."
+  ],
+  "documents": [
+    {
+      "doc_id": "rbi_kyc_master_direction",
+      "filename": "rbi_kyc_master_direction.pdf",
+      "title": "RBI Master Direction - Know Your Customer (KYC) Direction, 2016",
+      "short_title": "RBI Master Direction - KYC, 2016",
+      "authority": "Reserve Bank of India",
+      "version": "RBI/DBR/2015-16/18, issued 25 Feb 2016, updated as on 14 Aug 2025",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/MD18KYCF6E92C82E1E1419D87323E3869BC9F13.PDF",
+      "size_bytes": 2049883
+    },
+    {
+      "doc_id": "pmla_act_2002",
+      "filename": "pmla_act_2002.pdf",
+      "title": "The Prevention of Money-Laundering Act, 2002",
+      "short_title": "PMLA, 2002",
+      "authority": "Government of India",
+      "version": "Act 15 of 2003, as amended",
+      "source_url": "https://fiuindia.gov.in/pdfs/AML_legislation/PMLA_Act_2002.pdf",
+      "size_bytes": 504120
+    },
+    {
+      "doc_id": "pml_rules_2005",
+      "filename": "pml_rules_2005.pdf",
+      "title": "Prevention of Money-laundering (Maintenance of Records) Rules, 2005",
+      "short_title": "PML (Maintenance of Records) Rules, 2005",
+      "authority": "Government of India",
+      "version": "as amended to the Third Amendment Rules, 2023",
+      "source_url": "https://fiuindia.gov.in/pdfs/AML_legislation/PMLA_2005.pdf",
+      "size_bytes": 335649
+    },
+    {
+      "doc_id": "fiu_ind_reporting_format",
+      "filename": "fiu_ind_reporting_format.pdf",
+      "title": "FIU-IND Document Reporting Format (CTR, STR, CCR, NTR)",
+      "short_title": "FIU-IND Reporting Format",
+      "authority": "Financial Intelligence Unit - India",
+      "version": "Version 1.14",
+      "source_url": "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf",
+      "size_bytes": 5978084
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "generated_at": "2026-09-28T03:09:08.480521+00:00",
+  "detector": {
+    "velocity_max_seconds": 3600.0,
+    "velocity_ratio_range": [
+      0.1,
+      2.0
+    ],
+    "velocity_min_in_degree": 16,
+    "velocity_min_out_degree": 4,
+    "min_distinct_counterparty_banks": 2
+  },
+  "strategies_run": 3,
+  "caught": 0,
+  "missed": 3,
+  "isolated_graph_caveat": "Each strategy runs as its own graph, so the only transfers in the feature table are the ones the strategy creates. A CAUGHT verdict holds at least as strongly with background traffic, because the degree clauses are lower bounds over monotone counts. A MISSED verdict does NOT transfer: a real collector's own legitimate traffic raises the same counts and shifts the speed median.",
+  "scorer_not_attacked": "Rings come from the velocity rule, so the rule is what is attacked here. The XGBoost alert queue is not in this loop and an account this harness reports as missed may still score high.",
+  "verdicts": [
+    {
+      "name": "low-in-degree-fanin",
+      "description": "This strategy aims to evade detection by keeping the number of inbound transfers to the collector account below the required threshold. The collector receives money from a small number of mules, aggregates it, and then disburses it quickly, but the limited fan-in ensures it is not flagged by the velocity rule.",
+      "targets": "velocity",
+      "aimed_at_clause": "in_degree",
+      "why_it_should_evade": "in_degree: at least 16; chosen value: 8",
+      "pattern": {
+        "collectors": 1,
+        "mules_per_collector": 8,
+        "onward_accounts": 5,
+        "hop_delay_seconds": 600.0,
+        "amount_per_inbound_hop": 4200.0,
+        "retained_fraction": 0.05,
+        "counterparty_banks": 2,
+        "reuse_device": false,
+        "reuse_kyc_id": false,
+        "clamped": []
+      },
+      "caught": false,
+      "caught_by": "missed",
+      "reasoning": "Evaded. Failing clause(s) on the collector: in_degree=8 (needs x >= 16).",
+      "flagged_accounts": 0,
+      "flagged_collectors": 0,
+      "rings_formed": 0,
+      "stage2_alertable": 0,
+      "stage2_context": 0,
+      "clause_values": {
+        "f919ed963378fc864dbac26d4a9526ee01b64fb76798f388d52d337738ec9dc3": {
+          "passthrough_speed_seconds": {
+            "value": 1020.0,
+            "passes": true,
+            "requirement": "0 <= x <= 3600"
+          },
+          "passthrough_ratio": {
+            "value": 0.95,
+            "passes": true,
+            "requirement": "0.1 <= x <= 2"
+          },
+          "in_degree": {
+            "value": 8,
+            "passes": false,
+            "requirement": "x >= 16"
+          },
+          "out_degree": {
+            "value": 5,
+            "passes": true,
+            "requirement": "x >= 4"
+          },
+          "distinct_counterparty_banks": {
+            "value": 2,
+            "passes": true,
+            "requirement": "x >= 2"
+          }
+        }
+      }
+    },
+    {
+      "name": "delayed-passthrough-burst-split",
+      "description": "This strategy focuses on making the passthrough speed undetectable by ensuring transfers within a burst are too slow. By setting a long delay between the last inbound and first outbound transfer, the activity within a single burst is either too slow to meet the threshold, or more likely, the burst splits, making the median speed calculation fail or return the sentinel -1.",
+      "targets": "velocity",
+      "aimed_at_clause": "passthrough_speed_seconds",
+      "why_it_should_evade": "passthrough_speed_seconds: between 0 and 3600; chosen value: 1801 (splits burst or exceeds 3600 if single burst)",
+      "pattern": {
+        "collectors": 1,
+        "mules_per_collector": 20,
+        "onward_accounts": 5,
+        "hop_delay_seconds": 1801.0,
+        "amount_per_inbound_hop": 4200.0,
+        "retained_fraction": 0.05,
+        "counterparty_banks": 2,
+        "reuse_device": false,
+        "reuse_kyc_id": false,
+        "clamped": []
+      },
+      "caught": false,
+      "caught_by": "missed",
+      "reasoning": "Evaded. Failing clause(s) on the collector: passthrough_speed_seconds=-1.0 (needs 0 <= x <= 3600).",
+      "flagged_accounts": 0,
+      "flagged_collectors": 0,
+      "rings_formed": 0,
+      "stage2_alertable": 0,
+      "stage2_context": 0,
+      "clause_values": {
+        "ccdfa33b4184d7bd0184908ad1b4a2347d8aa7e551a5a3b5c51e8ffeb72ec816": {
+          "passthrough_speed_seconds": {
+            "value": -1.0,
+            "passes": false,
+            "requirement": "0 <= x <= 3600"
+          },
+          "passthrough_ratio": {
+            "value": 0.95,
+            "passes": true,
+            "requirement": "0.1 <= x <= 2"
+          },
+          "in_degree": {
+            "value": 20,
+            "passes": true,
+            "requirement": "x >= 16"
+          },
+          "out_degree": {
+            "value": 5,
+            "passes": true,
+            "requirement": "x >= 4"
+          },
+          "distinct_counterparty_banks": {
+            "value": 2,
+            "passes": true,
+            "requirement": "x >= 2"
+          }
+        }
+      }
+    },
+    {
+      "name": "high-retention-low-ratio",
+      "description": "This strategy evades detection by manipulating the passthrough ratio. The collector account retains a significant portion of the incoming funds, ensuring that the total amount paid out is a very small fraction of the total amount received. This keeps the passthrough ratio below the minimum threshold.",
+      "targets": "velocity",
+      "aimed_at_clause": "passthrough_ratio",
+      "why_it_should_evade": "passthrough_ratio: between 0.1 and 2.0; chosen value: 0.05 (1 - retained_fraction)",
+      "pattern": {
+        "collectors": 1,
+        "mules_per_collector": 20,
+        "onward_accounts": 5,
+        "hop_delay_seconds": 600.0,
+        "amount_per_inbound_hop": 4200.0,
+        "retained_fraction": 0.95,
+        "counterparty_banks": 2,
+        "reuse_device": false,
+        "reuse_kyc_id": false,
+        "clamped": []
+      },
+      "caught": false,
+      "caught_by": "missed",
+      "reasoning": "Evaded. Failing clause(s) on the collector: passthrough_ratio=0.05 (needs 0.1 <= x <= 2).",
+      "flagged_accounts": 0,
+      "flagged_collectors": 0,
+      "rings_formed": 0,
+      "stage2_alertable": 0,
+      "stage2_context": 0,
+      "clause_values": {
+        "d0d120e4c67bcf8a4ebf5b93847672f0843b439738f0b94dc8009fb2c8e4e0f4": {
+          "passthrough_speed_seconds": {
+            "value": 1740.0,
+            "passes": true,
+            "requirement": "0 <= x <= 3600"
+          },
+          "passthrough_ratio": {
+            "value": 0.05,
+            "passes": false,
+            "requirement": "0.1 <= x <= 2"
+          },
+          "in_degree": {
+            "value": 20,
+            "passes": true,
+            "requirement": "x >= 16"
+          },
+          "out_degree": {
+            "value": 5,
+            "passes": true,
+            "requirement": "x >= 4"
+          },
+          "distinct_counterparty_banks": {
+            "value": 2,
+            "passes": true,
+            "requirement": "x >= 2"
+          }
+        }
+      }
+    }
+  ]
+}

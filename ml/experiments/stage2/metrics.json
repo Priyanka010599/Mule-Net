@@ -1,0 +1,198 @@
+{
+  "stage2_version": "mulenet-identity-propagation-v1",
+  "stage1_detector_version": "mulenet-velocity-rule-v2",
+  "propagation_hops": 1,
+  "propagation_keys": [
+    "device_fingerprint",
+    "hashed_id_number"
+  ],
+  "identity_edges": 8996,
+  "accounts_with_any_identity_edge": 4773,
+  "non_complicit_accounts_with_identity_edge": 4102,
+  "ring_membership": {
+    "stage1": {
+      "members": 298,
+      "passthrough_mules": 265,
+      "sources": 0,
+      "complicit": 265,
+      "non_complicit": 33,
+      "contamination": 0.11073825503355705,
+      "true_rings_touched": 53,
+      "true_rings_fully_covered": 0
+    },
+    "stage1_plus_stage2": {
+      "members": 401,
+      "passthrough_mules": 297,
+      "sources": 58,
+      "complicit": 355,
+      "non_complicit": 46,
+      "contamination": 0.11471321695760599,
+      "true_rings_touched": 53,
+      "true_rings_fully_covered": 34
+    }
+  },
+  "added_by_stage2": {
+    "accounts": 103,
+    "membership_rows": 103,
+    "alertable_rows": 54,
+    "context_rows": 49,
+    "sources": 58,
+    "passthrough_mules": 32,
+    "non_complicit": 13,
+    "precision": 0.8737864077669902,
+    "non_complicit_cohorts": {
+      "normal": 9,
+      "hard_negative_family": 3,
+      "hard_negative_dual_bank": 1
+    }
+  },
+  "alert_level": {
+    "totals": {
+      "complicit": 899,
+      "sources": 187,
+      "passthrough_mules": 712
+    },
+    "stage1": {
+      "alerts": 676,
+      "complicit_recall": 0.6952169076751946,
+      "source_recall": 0.0,
+      "passthrough_recall": 0.8778089887640449,
+      "non_complicit_alerts": 51
+    },
+    "stage1_plus_stage2": {
+      "alerts": 757,
+      "complicit_recall": 0.7708565072302559,
+      "source_recall": 0.31016042780748665,
+      "passthrough_recall": 0.8918539325842697,
+      "non_complicit_alerts": 64
+    }
+  },
+  "missed_rings": {
+    "all_rings": {
+      "fast_passthrough_only": {
+        "span1": 9,
+        "span2": 12,
+        "span3": 9
+      },
+      "mixed": {
+        "span1": 9,
+        "span2": 12,
+        "span3": 9
+      },
+      "reused_document": {
+        "span1": 9,
+        "span2": 12,
+        "span3": 9
+      },
+      "shared_device": {
+        "span1": 9,
+        "span2": 12,
+        "span3": 9
+      }
+    },
+    "recovered_stage1": {
+      "fast_passthrough_only": {
+        "span1": 3,
+        "span2": 10,
+        "span3": 1
+      },
+      "mixed": {
+        "span1": 3,
+        "span2": 8,
+        "span3": 3
+      },
+      "reused_document": {
+        "span1": 4,
+        "span2": 2,
+        "span3": 4
+      },
+      "shared_device": {
+        "span1": 4,
+        "span2": 7,
+        "span3": 4
+      }
+    },
+    "missed_stage1": {
+      "fast_passthrough_only": {
+        "span1": 6,
+        "span2": 2,
+        "span3": 8
+      },
+      "mixed": {
+        "span1": 6,
+        "span2": 4,
+        "span3": 6
+      },
+      "reused_document": {
+        "span1": 5,
+        "span2": 10,
+        "span3": 5
+      },
+      "shared_device": {
+        "span1": 5,
+        "span2": 5,
+        "span3": 5
+      }
+    },
+    "newly_recovered_by_stage2": {}
+  },
+  "source_recovery_by_pattern": {
+    "fast_passthrough_only": {
+      "span1": {
+        "recovered": 0,
+        "total": 15
+      },
+      "span2": {
+        "recovered": 0,
+        "total": 16
+      },
+      "span3": {
+        "recovered": 0,
+        "total": 10
+      }
+    },
+    "mixed": {
+      "span1": {
+        "recovered": 5,
+        "total": 17
+      },
+      "span2": {
+        "recovered": 14,
+        "total": 22
+      },
+      "span3": {
+        "recovered": 3,
+        "total": 12
+      }
+    },
+    "reused_document": {
+      "span1": {
+        "recovered": 7,
+        "total": 12
+      },
+      "span2": {
+        "recovered": 3,
+        "total": 19
+      },
+      "span3": {
+        "recovered": 3,
+        "total": 14
+      }
+    },
+    "shared_device": {
+      "span1": {
+        "recovered": 6,
+        "total": 12
+      },
+      "span2": {
+        "recovered": 11,
+        "total": 22
+      },
+      "span3": {
+        "recovered": 6,
+        "total": 16
+      }
+    }
+  },
+  "generated_at": "2026-09-25T11:34:42.735785+00:00"
+}

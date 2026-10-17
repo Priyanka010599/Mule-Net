@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-10-04T14:40:31.015343+00:00",
+  "source": "cached strategies replayed from ui/data/redteam_fallback.json, not a fresh Gemini call",
+  "caveats": [
+    "Isolated graph: each strategy's feature table holds only that strategy's own synthetic accounts and transfers, same as ml/redteam.py. A detector trained or tuned expecting a busy background graph may behave differently in production.",
+    "The attacker knows the detector's exact thresholds: Gemini was given the velocity rule's five clauses verbatim and told to beat them. Model A/B were not targeted directly -- but they are trained on the same cb_ features those clauses read, so a pattern built to clear one tends to clear the other.",
+    "Strategies are replayed, not regenerated: this is the same 3 patterns ml/redteam.py already scored, not a fresh adversarial search against Model A/B specifically."
+  ],
+  "strategies": [
+    {
+      "name": "low-in-degree-fanin",
+      "evades_clause": "in_degree",
+      "velocity_caught": false,
+      "model_a_caught": false,
+      "model_b_caught": false
+    },
+    {
+      "name": "delayed-passthrough-burst-split",
+      "evades_clause": "passthrough_speed_seconds",
+      "velocity_caught": false,
+      "model_a_caught": false,
+      "model_b_caught": false
+    },
+    {
+      "name": "high-retention-low-ratio",
+      "evades_clause": "passthrough_ratio",
+      "velocity_caught": false,
+      "model_a_caught": false,
+      "model_b_caught": false
+    }
+  ]
+}

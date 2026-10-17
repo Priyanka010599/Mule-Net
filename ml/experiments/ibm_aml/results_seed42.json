@@ -1,0 +1,72 @@
+[
+  {
+    "model": "xgboost_full",
+    "seed": 42,
+    "pr_auc": 0.08073880520056001,
+    "false_alerts_per_catch_at_80pct_recall": 25.344278411325206,
+    "recall_at_1pct_fpr_train_threshold": 0.11263174453358503,
+    "realized_fpr": 0.010557642447580352,
+    "flagged_accounts": 6087,
+    "positives": 6357
+  },
+  {
+    "model": "xgboost_first3",
+    "seed": 42,
+    "pr_auc": 0.03216049715718687,
+    "false_alerts_per_catch_at_80pct_recall": 52.765434526150216,
+    "recall_at_1pct_fpr_train_threshold": 0.05505741702060721,
+    "realized_fpr": 0.010070154954189935,
+    "flagged_accounts": 5473,
+    "positives": 6357
+  },
+  {
+    "model": "xgboost_full_raw_amounts_sensitivity",
+    "seed": 42,
+    "pr_auc": 0.09032942186239597,
+    "false_alerts_per_catch_at_80pct_recall": 23.953598112465592,
+    "recall_at_1pct_fpr_train_threshold": 0.12553091080698442,
+    "realized_fpr": 0.010480981107893956,
+    "flagged_accounts": 6130,
+    "positives": 6357
+  },
+  {
+    "model": "logistic_regression_full",
+    "seed": 42,
+    "pr_auc": 0.05005034569509339,
+    "false_alerts_per_catch_at_80pct_recall": 38.084545812033035,
+    "recall_at_1pct_fpr_train_threshold": 0.08793456032719836,
+    "realized_fpr": 0.009706505009523697,
+    "flagged_accounts": 5497,
+    "positives": 6357
+  },
+  {
+    "model": "logistic_regression_first3",
+    "seed": 42,
+    "pr_auc": 0.02402451449453697,
+    "false_alerts_per_catch_at_80pct_recall": 54.17184427841133,
+    "recall_at_1pct_fpr_train_threshold": 0.02973100519112789,
+    "realized_fpr": 0.009826411207494726,
+    "flagged_accounts": 5188,
+    "positives": 6357
+  },
+  {
+    "model": "component_size_baseline_full_graph",
+    "seed": 42,
+    "pr_auc": 0.017042089076114347,
+    "false_alerts_per_catch_at_80pct_recall": 47.62013370035391,
+    "recall_at_1pct_fpr_train_threshold": 0.9976403964134025,
+    "realized_fpr": 0.7189398719559059,
+    "flagged_accounts": 372089,
+    "positives": 6357
+  },
+  {
+    "model": "degree_threshold_baseline_full_graph",
+    "seed": 42,
+    "pr_auc": 0.025525146790761687,
+    "false_alerts_per_catch_at_80pct_recall": 46.86197404640189,
+    "recall_at_1pct_fpr_train_threshold": 0.0357086676105081,
+    "realized_fpr": 0.010211683581303282,
+    "flagged_accounts": 5422,
+    "positives": 6357
+  }
+]

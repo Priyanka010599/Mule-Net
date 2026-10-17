@@ -1,0 +1,674 @@
+{
+  "model": "velocity_rule_in_sample",
+  "generated_at": "2026-09-24T16:34:40.328223+00:00",
+  "design": "velocity decides, identity is evidence: the firing condition reads five velocity/structure features and no identity signal; identity reuse is attached to flagged accounts for the analyst and the report-writing agent",
+  "decision_branch": "velocity_only",
+  "rule": {
+    "velocity_decision": {
+      "max_passthrough_speed_seconds": 3600.0,
+      "passthrough_ratio_range": [
+        0.1,
+        2.0
+      ],
+      "min_in_degree": 16,
+      "min_out_degree": 4,
+      "min_distinct_counterparty_banks": 2,
+      "requires_cross_bank_join": "min_distinct_counterparty_banks=2 is uncomputable in the sb_ scope, where that feature is capped at 1; the literal single-bank transcription therefore fires on zero accounts",
+      "threshold_provenance": "modal choice across the 15 training folds of ml/tune.py (5 folds x 3 seeds), each tuned on training rings only"
+    },
+    "retired_identity_branch": {
+      "fast_max_seconds": 1800.0,
+      "min_degree": 3,
+      "passthrough_ratio_range": [
+        0.6,
+        1.3
+      ],
+      "why_retired": "strictly dominated: 0 true positives velocity had not already caught, and false positives of its own (see branch_overlap)"
+    }
+  },
+  "metrics_are_in_sample": "thresholds were chosen on this dataset, so precision/recall here are resubstitution estimates; the held-out estimate is in experiments/rule_tuning/metrics.json and differs by <0.001",
+  "per_pattern_precision_convention": "true positives of that pattern against ALL of the rule's false positives; a lower bound, since false positives carry no pattern",
+  "total_positives": 712,
+  "total_accounts": 30000,
+  "variants": {
+    "cross_bank": {
+      "identity_only": {
+        "precision": 0.5739130434782609,
+        "recall": 0.27808988764044945,
+        "fpr": 0.005019120458891013,
+        "flagged": 345,
+        "true_positives": 198,
+        "false_positives": 147,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 68,
+            "recall": 0.3617021276595745,
+            "precision_vs_all_fp": 0.31627906976744186
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 59,
+            "recall": 0.34104046242774566,
+            "precision_vs_all_fp": 0.28640776699029125
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 71,
+            "recall": 0.4329268292682927,
+            "precision_vs_all_fp": 0.3256880733944954
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 114,
+            "recall": 0.37748344370860926,
+            "precision_vs_all_fp": 0.4367816091954023
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 84,
+            "recall": 0.37168141592920356,
+            "precision_vs_all_fp": 0.36363636363636365
+          }
+        }
+      },
+      "velocity_only": {
+        "precision": 0.9245562130177515,
+        "recall": 0.8778089887640449,
+        "fpr": 0.0017413275061458617,
+        "flagged": 676,
+        "true_positives": 625,
+        "false_positives": 51,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 166,
+            "recall": 0.8877005347593583,
+            "precision_vs_all_fp": 0.7649769585253456
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 170,
+            "recall": 0.9042553191489362,
+            "precision_vs_all_fp": 0.7692307692307693
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 147,
+            "recall": 0.8497109826589595,
+            "precision_vs_all_fp": 0.7424242424242424
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 142,
+            "recall": 0.8658536585365854,
+            "precision_vs_all_fp": 0.7357512953367875
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 157,
+            "recall": 0.8532608695652174,
+            "precision_vs_all_fp": 0.7548076923076923
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 270,
+            "recall": 0.8940397350993378,
+            "precision_vs_all_fp": 0.8411214953271028
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 198,
+            "recall": 0.8761061946902655,
+            "precision_vs_all_fp": 0.7951807228915663
+          }
+        }
+      },
+      "combined": {
+        "precision": 0.7603406326034063,
+        "recall": 0.8778089887640449,
+        "fpr": 0.00672630428844578,
+        "flagged": 822,
+        "true_positives": 625,
+        "false_positives": 197,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 166,
+            "recall": 0.8877005347593583,
+            "precision_vs_all_fp": 0.4573002754820937
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 170,
+            "recall": 0.9042553191489362,
+            "precision_vs_all_fp": 0.46321525885558584
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 147,
+            "recall": 0.8497109826589595,
+            "precision_vs_all_fp": 0.4273255813953488
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 142,
+            "recall": 0.8658536585365854,
+            "precision_vs_all_fp": 0.41887905604719766
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 157,
+            "recall": 0.8532608695652174,
+            "precision_vs_all_fp": 0.4435028248587571
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 270,
+            "recall": 0.8940397350993378,
+            "precision_vs_all_fp": 0.5781584582441114
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 198,
+            "recall": 0.8761061946902655,
+            "precision_vs_all_fp": 0.5012658227848101
+          }
+        }
+      }
+    },
+    "single_bank": {
+      "identity_only": {
+        "precision": 0.025096525096525095,
+        "recall": 0.018258426966292134,
+        "fpr": 0.01724255667850314,
+        "flagged": 518,
+        "true_positives": 13,
+        "false_positives": 505,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 5,
+            "recall": 0.026595744680851064,
+            "precision_vs_all_fp": 0.00980392156862745
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 4,
+            "recall": 0.023121387283236993,
+            "precision_vs_all_fp": 0.007858546168958742
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 4,
+            "recall": 0.024390243902439025,
+            "precision_vs_all_fp": 0.007858546168958742
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 4,
+            "recall": 0.021739130434782608,
+            "precision_vs_all_fp": 0.007858546168958742
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 5,
+            "recall": 0.016556291390728478,
+            "precision_vs_all_fp": 0.00980392156862745
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 4,
+            "recall": 0.017699115044247787,
+            "precision_vs_all_fp": 0.007858546168958742
+          }
+        }
+      },
+      "velocity_only": {
+        "precision": 0.7211538461538461,
+        "recall": 0.10533707865168539,
+        "fpr": 0.0009901666211417645,
+        "flagged": 104,
+        "true_positives": 75,
+        "false_positives": 29,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 22,
+            "recall": 0.11764705882352941,
+            "precision_vs_all_fp": 0.43137254901960786
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 26,
+            "recall": 0.13829787234042554,
+            "precision_vs_all_fp": 0.4727272727272727
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 16,
+            "recall": 0.09248554913294797,
+            "precision_vs_all_fp": 0.35555555555555557
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 11,
+            "recall": 0.06707317073170732,
+            "precision_vs_all_fp": 0.275
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 47,
+            "recall": 0.2554347826086957,
+            "precision_vs_all_fp": 0.618421052631579
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 21,
+            "recall": 0.0695364238410596,
+            "precision_vs_all_fp": 0.42
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 7,
+            "recall": 0.030973451327433628,
+            "precision_vs_all_fp": 0.19444444444444445
+          }
+        }
+      },
+      "combined": {
+        "precision": 0.13355048859934854,
+        "recall": 0.1151685393258427,
+        "fpr": 0.018164435946462717,
+        "flagged": 614,
+        "true_positives": 82,
+        "false_positives": 532,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 22,
+            "recall": 0.11764705882352941,
+            "precision_vs_all_fp": 0.039711191335740074
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 27,
+            "recall": 0.14361702127659576,
+            "precision_vs_all_fp": 0.04830053667262969
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 19,
+            "recall": 0.10982658959537572,
+            "precision_vs_all_fp": 0.034482758620689655
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 14,
+            "recall": 0.08536585365853659,
+            "precision_vs_all_fp": 0.02564102564102564
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 49,
+            "recall": 0.266304347826087,
+            "precision_vs_all_fp": 0.08433734939759036
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 23,
+            "recall": 0.076158940397351,
+            "precision_vs_all_fp": 0.04144144144144144
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 10,
+            "recall": 0.04424778761061947,
+            "precision_vs_all_fp": 0.01845018450184502
+          }
+        }
+      }
+    },
+    "single_bank_literal": {
+      "identity_only": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "fpr": 0.0,
+        "flagged": 0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          }
+        }
+      },
+      "velocity_only": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "fpr": 0.0,
+        "flagged": 0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          }
+        }
+      },
+      "combined": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "fpr": 0.0,
+        "flagged": 0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "per_pattern": {
+          "fast_passthrough_only": {
+            "positives": 187,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "mixed": {
+            "positives": 188,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "reused_document": {
+            "positives": 173,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "shared_device": {
+            "positives": 164,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          }
+        },
+        "per_span": {
+          "span1": {
+            "positives": 184,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span2": {
+            "positives": 302,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          },
+          "span3": {
+            "positives": 226,
+            "caught": 0,
+            "recall": 0.0,
+            "precision_vs_all_fp": 0.0
+          }
+        }
+      }
+    }
+  },
+  "branch_overlap": {
+    "cross_bank": {
+      "tp_identity_only": 198,
+      "tp_velocity_only": 625,
+      "tp_both": 198,
+      "tp_added_by_identity": 0,
+      "fp_added_by_identity": 146,
+      "tp_added_by_velocity": 427,
+      "fp_added_by_velocity": 50
+    },
+    "single_bank": {
+      "tp_identity_only": 13,
+      "tp_velocity_only": 75,
+      "tp_both": 6,
+      "tp_added_by_identity": 7,
+      "fp_added_by_identity": 503,
+      "tp_added_by_velocity": 69,
+      "fp_added_by_velocity": 27
+    },
+    "single_bank_literal": {
+      "tp_identity_only": 0,
+      "tp_velocity_only": 0,
+      "tp_both": 0,
+      "tp_added_by_identity": 0,
+      "fp_added_by_identity": 0,
+      "tp_added_by_velocity": 0,
+      "fp_added_by_velocity": 0
+    }
+  },
+  "evidence_attachment": {
+    "cross_bank": {
+      "all_flagged": {
+        "flagged": 676,
+        "cross_bank_shared_device": 0.28106508875739644,
+        "cross_bank_reused_id_number": 0.2411242603550296,
+        "cross_bank_reused_photo": 0.2411242603550296,
+        "same_bank_shared_device": 0.32988165680473375,
+        "same_bank_reused_id_number": 0.3076923076923077,
+        "same_bank_reused_photo": 0.3076923076923077,
+        "any_cross_bank_evidence": 0.5162721893491125,
+        "no_cross_bank_evidence": 0.48372781065088755
+      },
+      "true_positives": {
+        "flagged": 625,
+        "cross_bank_shared_device": 0.3024,
+        "cross_bank_reused_id_number": 0.2592,
+        "cross_bank_reused_photo": 0.2592,
+        "same_bank_shared_device": 0.3536,
+        "same_bank_reused_id_number": 0.3136,
+        "same_bank_reused_photo": 0.3136,
+        "any_cross_bank_evidence": 0.5568,
+        "no_cross_bank_evidence": 0.44320000000000004
+      },
+      "false_positives": {
+        "flagged": 51,
+        "cross_bank_shared_device": 0.0196078431372549,
+        "cross_bank_reused_id_number": 0.0196078431372549,
+        "cross_bank_reused_photo": 0.0196078431372549,
+        "same_bank_shared_device": 0.0392156862745098,
+        "same_bank_reused_id_number": 0.23529411764705882,
+        "same_bank_reused_photo": 0.23529411764705882,
+        "any_cross_bank_evidence": 0.0196078431372549,
+        "no_cross_bank_evidence": 0.9803921568627451
+      }
+    },
+    "single_bank": {
+      "all_flagged": {
+        "flagged": 104,
+        "cross_bank_shared_device": 0.09615384615384616,
+        "cross_bank_reused_id_number": 0.08653846153846154,
+        "cross_bank_reused_photo": 0.08653846153846154,
+        "same_bank_shared_device": 0.23076923076923078,
+        "same_bank_reused_id_number": 0.34615384615384615,
+        "same_bank_reused_photo": 0.34615384615384615,
+        "any_cross_bank_evidence": 0.18269230769230768,
+        "no_cross_bank_evidence": 0.8173076923076923
+      },
+      "true_positives": {
+        "flagged": 75,
+        "cross_bank_shared_device": 0.13333333333333333,
+        "cross_bank_reused_id_number": 0.12,
+        "cross_bank_reused_photo": 0.12,
+        "same_bank_shared_device": 0.32,
+        "same_bank_reused_id_number": 0.38666666666666666,
+        "same_bank_reused_photo": 0.38666666666666666,
+        "any_cross_bank_evidence": 0.25333333333333335,
+        "no_cross_bank_evidence": 0.7466666666666666
+      },
+      "false_positives": {
+        "flagged": 29,
+        "cross_bank_shared_device": 0.0,
+        "cross_bank_reused_id_number": 0.0,
+        "cross_bank_reused_photo": 0.0,
+        "same_bank_shared_device": 0.0,
+        "same_bank_reused_id_number": 0.2413793103448276,
+        "same_bank_reused_photo": 0.2413793103448276,
+        "any_cross_bank_evidence": 0.0,
+        "no_cross_bank_evidence": 1.0
+      }
+    }
+  },
+  "evidence_redundancy": {
+    "jaccard:cross_bank_shared_device|cross_bank_reused_id_number": 0.31546231546231546,
+    "jaccard:cross_bank_shared_device|cross_bank_reused_photo": 0.31546231546231546,
+    "jaccard:cross_bank_reused_id_number|cross_bank_reused_photo": 1.0
+  },
+  "evidence_redundancy_verdict": "cross_bank_reused_photo and cross_bank_reused_id_number have Jaccard 1.000: the simulator attaches a reused photo_embedding_ref to exactly the documents that reuse hashed_id_number. Verdict: (b) artifact of the generator, not leakage. Cite identity reuse once in an STR; do not render these as independent corroborations.",
+  "summary": {
+    "cross_bank": {
+      "precision_mean": 0.9245562130177515,
+      "precision_std": 0.0,
+      "recall_mean": 0.8778089887640449,
+      "recall_std": 0.0,
+      "fpr_mean": 0.0017413275061458617,
+      "fpr_std": 0.0
+    },
+    "single_bank": {
+      "precision_mean": 0.7211538461538461,
+      "precision_std": 0.0,
+      "recall_mean": 0.10533707865168539,
+      "recall_std": 0.0,
+      "fpr_mean": 0.0009901666211417645,
+      "fpr_std": 0.0
+    },
+    "single_bank_literal": {
+      "precision_mean": 0.0,
+      "precision_std": 0.0,
+      "recall_mean": 0.0,
+      "recall_std": 0.0,
+      "fpr_mean": 0.0,
+      "fpr_std": 0.0
+    }
+  },
+  "runs": [
+    {
+      "scope": "cross_bank",
+      "seed": 0
+    },
+    {
+      "scope": "single_bank",
+      "seed": 0
+    },
+    {
+      "scope": "single_bank_literal",
+      "seed": 0
+    }
+  ]
+}

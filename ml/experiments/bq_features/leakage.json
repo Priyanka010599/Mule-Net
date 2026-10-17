@@ -1,0 +1,64 @@
+{
+  "probe_cutoff": "2025-01-16 00:00:05.500000+00:00",
+  "post_cutoff_transfers": 302773,
+  "dropped_matches_baseline": true,
+  "corrupted_matches_baseline": true,
+  "control_accounts_changed": 30000,
+  "control_is_live": true,
+  "verdict": true,
+  "queries": [
+    {
+      "scope": "cross_bank",
+      "job_id": "3cbd7231-c1c5-48c0-8a22-66c632b14c93",
+      "rows": 30000,
+      "bytes_processed": 127181580,
+      "bytes_billed": 127926272,
+      "mib_processed": 121.29,
+      "cache_hit": false,
+      "seconds": 170.206,
+      "job_seconds": 78.817,
+      "slot_millis": 880695,
+      "usd": 0.00072718
+    },
+    {
+      "scope": "cross_bank",
+      "job_id": "65a5f192-ca70-452a-b348-1d067078d855",
+      "rows": 30000,
+      "bytes_processed": 127181580,
+      "bytes_billed": 127926272,
+      "mib_processed": 121.29,
+      "cache_hit": false,
+      "seconds": 603.969,
+      "job_seconds": 502.982,
+      "slot_millis": 10190819,
+      "usd": 0.00072718
+    },
+    {
+      "scope": "cross_bank",
+      "job_id": "572b1789-0fbe-4c65-8298-285697538587",
+      "rows": 30000,
+      "bytes_processed": 127181580,
+      "bytes_billed": 127926272,
+      "mib_processed": 121.29,
+      "cache_hit": false,
+      "seconds": 660.148,
+      "job_seconds": 562.263,
+      "slot_millis": 19425033,
+      "usd": 0.00072718
+    },
+    {
+      "scope": "cross_bank",
+      "job_id": "e84cd24a-eff9-40f5-a0ad-79bf21e4ecb5",
+      "rows": 30000,
+      "bytes_processed": 127181580,
+      "bytes_billed": 127926272,
+      "mib_processed": 121.29,
+      "cache_hit": false,
+      "seconds": 183.656,
+      "job_seconds": 85.876,
+      "slot_millis": 1137815,
+      "usd": 0.00072718
+    }
+  ],
+  "total_usd": 0.00290871
+}

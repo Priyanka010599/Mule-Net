@@ -1,0 +1,33 @@
+# Builds the MuleNet ml/ training image for the Vertex AI custom job.
+#
+# Called only by ml/vertex/submit.py, whose `build` subcommand assembles
+# the context (ml/*.py + Dockerfile + requirements-train.txt) first.
+#
+# `options.logging: CLOUD_LOGGING_ONLY` is not decoration. A build that
+# runs as a user-specified service account -- which this one must, or it
+# fails on its own source upload -- has to say where its logs go, and the
+# alternatives are a logs bucket or the regional user-owned bucket. The
+# regional bucket is the trap: choosing it makes gcloud stage the source
+# tarball in gs://PROJECT_REGION_cloudbuild, which nothing has granted
+# mulenet-build access to, and the build fails with
+#
+#   mulenet-build@... does not have storage.objects.get access to
+#   .../buckets/mulenet_asia-south1_cloudbuild/objects/source/...
+#
+# CLOUD_LOGGING_ONLY keeps the source in gs://mulenet_cloudbuild, which
+# infra/deploy.sh already grants that account roles/storage.objectViewer
+# on. This mirrors infra/cloudbuild.yaml deliberately: the same account,
+# the same bucket, the same reason.
+substitutions:
+  _IMAGE: ''
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: build
+    args: ['build', '-f', 'Dockerfile', '-t', '${_IMAGE}', '.']
+
+images:
+  - '${_IMAGE}'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

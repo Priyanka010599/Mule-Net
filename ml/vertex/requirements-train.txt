@@ -1,0 +1,29 @@
+# Pinned to the EXACT versions the local canonical run used, because the
+# gate compares the cloud output to that run leaf for leaf. A float
+# result is a property of the library build, so a floated version here is
+# a floated number in metrics.json.
+#
+# Measured on the local machine on 2026-09-27:
+#   python 3.14.5, xgboost 3.4.1, numpy 2.5.2, pandas 3.0.5,
+#   scikit-learn 1.9.0, pyarrow 24.0.0, scipy 1.18.0, joblib 1.5.3,
+#   threadpoolctl 3.6.0
+#
+# The one thing that CANNOT be pinned to match is the compiled binary:
+# locally these are win_amd64 wheels, here they are manylinux_2_28
+# x86_64 wheels of the same version, built by a different compiler for a
+# different CPU baseline. That is the residual reproducibility risk and
+# it is why the gate exists rather than being assumed.
+xgboost==3.4.1
+numpy==2.5.2
+pandas==3.0.5
+scikit-learn==1.9.0
+pyarrow==24.0.0
+# scikit-learn's own dependencies, pinned for the same reason. The first
+# build of this image resolved scipy to 1.18.1 while the local run used
+# 1.18.0; sklearn's metrics are where PR-AUC and ROC-AUC actually come
+# from, so that difference had to be removed rather than hoped about.
+scipy==1.18.0
+joblib==1.5.3
+threadpoolctl==3.6.0
+# Staging only; never touches a number.
+google-cloud-storage==3.5.0

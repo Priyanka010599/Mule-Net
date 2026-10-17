@@ -1,0 +1,72 @@
+{
+  "_README": [
+    "THESE PASSAGES ARE PLACEHOLDERS. They are not quotations from any real",
+    "law, rule, regulation, guidance note or supervisory handbook, and the",
+    "citations are invented. They exist so the search tool and the report",
+    "drafting agents have something with the right SHAPE to run against while",
+    "no real corpus is loaded.",
+    "",
+    "Replace this file by indexing real public AML/KYC regulation PDFs (see",
+    "docai/index_regulations.py). Nothing generated from this corpus may be",
+    "filed, published, or shown to a regulator."
+  ],
+  "corpus_id": "PLACEHOLDER-CORPUS",
+  "passages": [
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-1 Customer due diligence",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-1 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-1",
+      "text": "PLACEHOLDER TEXT. An institution should identify each customer and verify that identity using independent and reliable source documents before the account is used. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-2 Reliance on identity documents",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-2 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-2",
+      "text": "PLACEHOLDER TEXT. Where the same identity document, identity number or address proof is presented in support of more than one account, the institution should record the duplication and establish whether an innocent explanation exists, such as a joint account, a family member or a business owner. Duplication alone is not evidence of wrongdoing. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-3 Document reuse across institutions",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-3 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-3",
+      "text": "PLACEHOLDER TEXT. Reuse of one identity across accounts held at different institutions warrants closer review than reuse within a single institution, because no single institution can observe it. The reviewing institution should weigh the reuse together with account velocity, pass-through behaviour and network structure rather than acting on the reuse on its own. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-4 Ongoing monitoring",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-4 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-4",
+      "text": "PLACEHOLDER TEXT. Transactions should be monitored on an ongoing basis so that activity inconsistent with the customer's stated profile, including rapid pass-through of funds and sudden increases in transfer velocity, is escalated for review. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-5 Money mule indicators",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-5 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-5",
+      "text": "PLACEHOLDER TEXT. Indicators associated with mule activity include newly opened accounts that immediately receive and forward funds, accounts that retain little or no balance after forwarding, shared devices or identity documents between otherwise unrelated account holders, and layered transfers that cross institutional boundaries. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-6 Suspicious transaction reporting",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-6 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-6",
+      "text": "PLACEHOLDER TEXT. Where a reasonable review leaves a suspicion that funds represent the proceeds of crime, a suspicious transaction report should be filed with the relevant authority, setting out the accounts involved, the behaviour observed and the basis for the suspicion. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-7 Record keeping",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-7 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-7",
+      "text": "PLACEHOLDER TEXT. Identification records, the evidence relied on to verify them, and the reasoning behind any escalation decision should be retained for the prescribed period and made available to supervisors on request. Placeholder passage for testing only."
+    },
+    {
+      "doc_name": "PLACEHOLDER AML/KYC HANDBOOK (SYNTHETIC - NOT A REAL REGULATION)",
+      "section": "P-8 Information sharing between institutions",
+      "citation": "PLACEHOLDER-AML-HANDBOOK s.P-8 (SYNTHETIC - NOT A REAL CITATION)",
+      "source_uri": "placeholder://mulenet/aml-handbook#P-8",
+      "text": "PLACEHOLDER TEXT. Institutions sharing information for the purpose of detecting financial crime should share the minimum necessary, should exchange pseudonymised identifiers rather than raw customer data where that is sufficient, and should record the lawful basis for each exchange. Placeholder passage for testing only."
+    }
+  ]
+}
