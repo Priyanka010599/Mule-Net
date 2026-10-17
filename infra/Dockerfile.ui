@@ -1,0 +1,36 @@
+# MuleNet UI -- FastAPI investigator console on Cloud Run.
+#
+# Build context is the repo root (ui/ imports nothing from shared/ at
+# request time, but shared/ is copied so the package is importable if a
+# future view reaches for a contract).
+#
+# Runtime dependencies only. ui/main.py's request path imports fastapi,
+# uvicorn, pydantic and jinja2 and nothing else: pandas and pyarrow are
+# used exclusively by ui/build_snapshot.py, which runs offline before the
+# image is built, so installing them here would add ~120 MB to the image
+# and to every cold start for code that never executes.
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir \
+      "fastapi" \
+      "uvicorn[standard]" \
+      "pydantic" \
+      "jinja2" \
+      "google-cloud-storage"
+
+COPY shared/ /app/shared/
+COPY ui/ /app/ui/
+COPY infra/__init__.py infra/fetch_data.py /app/infra/
+
+# The snapshot is not baked in: it is pulled from the data bucket at start
+# so the UI and agents read the identical published bytes. MULENET_FETCH
+# names the objects; with no bucket configured this is a no-op.
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["sh", "-c", "python -m infra.fetch_data && exec uvicorn ui.main:app --host 0.0.0.0 --port ${PORT}"]

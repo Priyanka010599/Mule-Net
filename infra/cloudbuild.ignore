@@ -1,0 +1,23 @@
+# Keeps the ~175 MB of generated data out of every Cloud Build upload.
+# Nothing here belongs in an image: the snapshot is fetched from Cloud
+# Storage at container start, and BigQuery is loaded straight from the
+# bucket. Passed to `gcloud builds submit --ignore-file`.
+.git/
+.venv/
+.pytest_cache/
+.ruff_cache/
+**/__pycache__/
+**/*.pyc
+
+# Generated data -- published to the data bucket, never into an image.
+simulator/out/
+ml/out/
+agents/out/
+ingest/out/
+ui/out/
+
+# Not needed to run any service.
+docs/
+**/test_*.py
+agents/eval/
+ml/experiments/

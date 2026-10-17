@@ -1,0 +1,40 @@
+# Builds one MuleNet service image and pushes it to Artifact Registry.
+#
+# The Dockerfiles live in infra/ but the build context is the repo root,
+# because every service image needs its own folder plus shared/.
+#
+# Usage (see infra/deploy.sh, which is the only thing that should call this):
+#   gcloud builds submit . \
+#     --config=infra/cloudbuild.yaml \
+#     --ignore-file=infra/cloudbuild.ignore \
+#     --substitutions=_SERVICE=ui,_REPO=mulenet,_REGION=us-central1,_TAG=abc1234
+#
+# _TAG is passed in rather than using $SHORT_SHA: that is only populated for
+# builds from a connected repository, and `gcloud builds submit .` uploads a
+# local tarball, so it expands to empty and the image reference is rejected
+# as "could not parse reference: .../ingest:".
+substitutions:
+  _SERVICE: ''
+  _REPO: 'mulenet'
+  _REGION: 'us-central1'
+  _TAG: 'latest'
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: build
+    args:
+      - 'build'
+      - '-f'
+      - 'infra/Dockerfile.${_SERVICE}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest'
+      - '.'
+
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

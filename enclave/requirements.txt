@@ -1,0 +1,25 @@
+# Runtime dependencies for the Confidential Space workload image.
+#
+# Pinned, not floated. The image digest IS the security boundary here: the KMS
+# key is released to one digest, so a rebuild that silently pulls a different
+# transitive version produces a different digest and breaks key release for a
+# change nobody made deliberately. Floating versions would make the negative
+# test ambiguous -- a refusal could mean "we tampered" or "pip resolved
+# differently today".
+#
+# Kept deliberately small. Nothing here is a Google Cloud client beyond KMS,
+# storage and auth: the enclave must not be able to reach BigQuery or AlloyDB,
+# because a workload that can write the operator's analytics store could
+# exfiltrate the joined graph it was trusted to keep private.
+
+# Versions below are the ones actually resolved and import-verified in the
+# session that wrote this file, not plausible-looking guesses. cryptography is
+# pinned to a 4x line because 41.0.7 is what was verified here; bump it
+# deliberately and re-pin the digest, never incidentally.
+cryptography==41.0.7
+pydantic==2.13.5
+google-auth==2.58.1
+google-cloud-kms==3.17.0
+google-cloud-storage==3.15.0
+numpy==2.4.6
+pandas==3.0.6

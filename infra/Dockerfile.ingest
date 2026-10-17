@@ -1,0 +1,32 @@
+# MuleNet ingest -- Pub/Sub push consumer on Cloud Run.
+#
+# Build context is the repo root: ingest/ imports shared.contracts and
+# shared.pubsub_schema.
+#
+# Deliberately no psycopg and no duckdb. The deployed stack runs Pub/Sub
+# and BigQuery only, and ingest/config.py defaults the operational sink to
+# "noop" whenever a real GCP project is configured, so the lazy psycopg
+# import in ingest/sinks.py PostgresSink is never reached. Leaving the
+# driver out means a misconfiguration fails at startup rather than writing
+# to a database nobody provisioned.
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir \
+      "fastapi" \
+      "uvicorn[standard]" \
+      "pydantic" \
+      "google-cloud-pubsub" \
+      "google-cloud-bigquery"
+
+COPY shared/ /app/shared/
+COPY ingest/ /app/ingest/
+
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["sh", "-c", "exec uvicorn ingest.app:app --host 0.0.0.0 --port ${PORT}"]

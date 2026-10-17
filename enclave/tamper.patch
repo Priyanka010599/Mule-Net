@@ -1,0 +1,9 @@
+--- a/enclave/workload.py
++++ b/enclave/workload.py
+@@ -246,5 +246,5 @@
+
+     flagged = _flagged_from_env(rekeyer, contributions)
+-    manifest.flagged_count = len(flagged)
++    manifest.flagged_count = len(flagged) + 1  # TAMPERED for the negative test
+     candidates = find_candidates(graph, flagged)
+     manifest.ring_count = len(candidates)

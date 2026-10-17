@@ -1,0 +1,92 @@
+# MuleNet agents -- the ADK/Gemini HTTP service on Cloud Run.
+#
+# Build context is the repo root: agents/ imports shared.contracts,
+# shared.tool_interfaces and shared.regulations.
+#
+# Unlike Dockerfile.ui this image DOES install pandas and pyarrow. The UI's
+# request path never touches parquet (its snapshot is pre-built JSON), but
+# every agents tool does: agents/data.py reads the published parquet with
+# pandas on the request path, and agents/tools.py run_sql loads those frames
+# into in-memory SQLite. They are runtime dependencies here, not build ones.
+#
+# sqlglot is also a runtime dependency, not a nicety: agents/sql_guard.py
+# parses and re-emits every model-authored query through it, and that is the
+# security boundary that stops a write or an out-of-allowlist read. Without
+# it run_sql does not fail open, it fails to import.
+#
+# No data is baked in. The published tables are pulled from Cloud Storage at
+# container start by infra/fetch_data.py, exactly as the UI pulls its
+# snapshot, so agents and ui answer from identical published bytes (md5
+# verified against each object). agents/service.py's lifespan hook then
+# refuses to start if the tables are absent -- see MULENET_FETCH in
+# infra/deploy.sh for the object list.
+#
+# scipy, scikit-learn and xgboost are also runtime dependencies here, and NOT
+# a nicety left over from the ml/ scorer: agents/simulate.py (POST /simulate,
+# the live evasion-pattern panel) imports ml.redteam to run a judge's own
+# pattern through the real detector, and that pulls in ml.rule, which pulls
+# in ml.evaluate for its threshold-tuning helpers, which imports xgboost at
+# module level -- and ml.metrics, which imports scikit-learn -- even though
+# the velocity rule itself (ml.rule.velocity_decision) never calls either.
+# This was checked rather than assumed: torch and torch_geometric (ml/gnn.py)
+# are NOT in this import chain and are NOT installed here. Pillow is also
+# deliberately absent -- agents/simulate.py inlines the two things
+# ml.redteam would otherwise reach for in simulator.generator (the bank ids
+# and the id-hashing convention) specifically to avoid pulling Pillow onto a
+# live request path; see that module's docstring.
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Pinned where the brief pins them: google-adk and google-genai are the two
+# whose surface the agents are written against, and a minor bump in either
+# has already changed tool-calling behaviour once.
+RUN pip install --no-cache-dir \
+      "fastapi" \
+      "uvicorn[standard]" \
+      "pydantic" \
+      "pandas" \
+      "pyarrow" \
+      "scipy" \
+      "scikit-learn" \
+      "xgboost" \
+      "google-adk==2.9.2" \
+      "google-genai==2.25.0" \
+      "google-cloud-aiplatform" \
+      "sqlglot" \
+      "google-cloud-storage" \
+      "google-cloud-compute" \
+      "google-cloud-bigquery" \
+      "google-cloud-bigquery-storage" \
+      "db-dtypes" \
+      "cryptography"
+
+COPY shared/ /app/shared/
+COPY agents/ /app/agents/
+COPY ml/ /app/ml/
+# agents/regulations.py imports docai.regulations whenever it is
+# importable, preferring the real Vertex AI Search backend over its own
+# built-in mock corpus (see that module's docstring). Without this, the
+# import always fails inside the container and every regulation
+# citation is silently the mock one -- observed live: the model called
+# search_regulations, got real results back with no error, and still
+# declined every RBI/PMLA question, because the "real" results it was
+# quoting were FATF/31-CFR mock passages that genuinely do not address
+# an Indian-regulator question. Only the two source files and the small
+# manifest json -- not docai/regulations_corpus/, the gitignored 8.6 MB
+# of actual PDFs, which cloud mode's REST calls never read locally.
+COPY docai/__init__.py docai/config.py docai/regulations.py /app/docai/
+COPY docai/regulations/corpus_manifest.json docai/regulations/placeholder_corpus.json /app/docai/regulations/
+# agents/live_proof_service.py imports enclave.live_proof (the judge-facing
+# live-proof VM orchestrator) and enclave.outbox_crypto (to attempt the
+# wrong-key/correct-key decrypt) -- both need the package on the image.
+COPY enclave/ /app/enclave/
+COPY infra/__init__.py infra/fetch_data.py /app/infra/
+
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["sh", "-c", "python -m infra.fetch_data && exec uvicorn agents.service:app --host 0.0.0.0 --port ${PORT}"]
