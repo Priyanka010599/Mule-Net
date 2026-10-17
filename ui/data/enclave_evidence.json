@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-09-29T04:37:02.502004+00:00",
+  "run_id": "stage3v2",
+  "attempt": "production",
+  "outcome": "completed",
+  "key_release_ok": true,
+  "running_debug_image": false,
+  "image_digest": "sha256:910cb38d22ed8ee89e40bd615dee91322f4dea83f7daebefecd535ee2ee8ae30",
+  "dbgstat": "disabled-since-boot",
+  "secboot": true,
+  "hwmodel": "GCP_AMD_SEV",
+  "support_attributes": ["LATEST", "STABLE", "USABLE"],
+  "contributing_banks": ["bank-a", "bank-b", "bank-c"],
+  "edge_count": 349524,
+  "account_count": 29973,
+  "flagged_count": 104,
+  "ring_count": 1,
+  "bundles_written": [
+    "outbox/bank-a/stage3v2/ring-enclave-9c446690f9d36cf6.json",
+    "outbox/bank-b/stage3v2/ring-enclave-9c446690f9d36cf6.json",
+    "outbox/bank-c/stage3v2/ring-enclave-9c446690f9d36cf6.json"
+  ],
+  "outbox_proof": {
+    "bank_id": "bank-a",
+    "object_path": "outbox/bank-a/stage3v2/ring-enclave-9c446690f9d36cf6.json",
+    "ciphertext_bytes_total": 4849,
+    "ciphertext_preview": "g2LX5Yt2+pIT+sfWaIui8JFe5R3sGLRR5pfqQ1A3dPKMrlCRCBZcMhVuCZfheOD1VJIKffwGvyOHqaPInnpKQ7KSjfsbREqXdfwtORhjB0Y5G/igr6pLaaccKevoyXAmjM9Ap2FuTw1Ou6EA8M5w4nLMhMqQgCMcrlwZdDHbSrDQ2/neshlr/+i5mgmMEBX6ZXHSHi84APbPrD8NUm1vb+SyjFv2K3RU0lxaAM3HwCMHim+ZxwJFpBJe8cj8noQGJPTOB7He6nk8E3Ap6VbOpEiVk22OrqAgetb/O31WrL0Neryy1MaGRZv2CIP3KvyO7mEwTBA9bGloaG8/YM4SVgevspbJMK1+PYYSnrTxdRZf2PYQspkTEApmv0j5LKDdHzdcw/Jejqu5d4JmBiHQ29W4Khul4BhA7c0o4jRYqALkJwP3HyL1bq1Gh+xt9B8ZMzc7YlqIskFpD58...",
+    "own_members_sample": [
+      "12d2dd5b5fe183eca4b4880a15c34782d27190c8c364b613cc065bdc0c151491",
+      "1ca93db0bc03218896b8543e09ae887cda159af262403805480327729193439c",
+      "23f946f63781433b17affca57c7f686d3ebf27263456358ae368faa8d7de539e",
+      "2c7438d4d6ac73ff94a10cb4190408e81a8b3e4b913b936020d79fffd58968d7",
+      "2ec036e5f9a9ee92f894ac693deec71aee85ad08eb22ae8531ab3fedcfb38734"
+    ],
+    "own_members_total": 36,
+    "other_bank_member_counts": {"bank-b": 32, "bank-c": 36},
+    "edges_sample": [
+      {
+        "amount": "132.76",
+        "channel": "card",
+        "currency": "USD",
+        "from_bank": "bank-b",
+        "from_ref": "other-bank:bank-b:1",
+        "to_bank": "bank-a",
+        "to_ref": "ba0948c371be7addab680666805c3e20cbeb0f622913cf4a65569e616a06ab95"
+      },
+      {
+        "amount": "303.40",
+        "channel": "card",
+        "currency": "USD",
+        "from_bank": "bank-a",
+        "from_ref": "88f49f54aa032cf82b011da6e8620f9fdaf680df2702075539a2090155d76500",
+        "to_bank": "bank-b",
+        "to_ref": "other-bank:bank-b:1"
+      }
+    ],
+    "decrypt_failure_bank_id": "bank-b",
+    "decrypt_failure_error": "cryptography.exceptions.InvalidTag"
+  },
+  "note": "Captured from one real, credentialed Confidential Space run against Google Cloud on 2026-09-29 (docs/enclave.md, Stage 3). This is not a fallback for a live path this app can recompute: reproducing it needs an actual GCP project, KMS, and a Confidential VM, none of which this container can reach. It is the frozen, reviewed record of that run, served as-is.",
+  "debug_refusal": {
+    "run_id": "negtest-20260927-175812",
+    "image_digest": "sha256:a30954fc46b9c878975d0bf0b3885626d57dfdc6e418b2564bc0048d1d55579b",
+    "dbgstat": "enabled",
+    "refusal_kind": "sts_exchange_refused",
+    "refusal_message": "Timeout of 60.0s exceeded, last exception: 503 Getting metadata from plugin failed with error: ('Error code unauthorized_client: The given credential is rejected by the attribute condition.', '{\"error\":\"unauthorized_client\",\"error_description\":\"The given credential is rejected by the attribute condition.\"}')",
+    "note": "The unchanged, approved image booted on the confidential-space-DEBUG family, from the same negative test (infra/enclave_negative_test.sh) as the tampered-digest evidence above. Refused at workload identity federation itself, before a credential -- let alone a KMS call -- ever existed, because the debug image reports dbgstat=enabled, not disabled-since-boot."
+  }
+}

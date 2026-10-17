@@ -1,0 +1,168 @@
+/* Supervisory polish. Loaded last. Presentation only: no text or figure
+ * in any view is changed. New rules use logical properties so a
+ * right-to-left locale can be added without a rewrite. */
+
+/* ── header ────────────────────────────────────────────────────── */
+
+.scale > div { min-width: max-content; }
+.topbar-actions { flex-wrap: wrap; }
+.topbar-actions .btn { padding-inline: 11px; }
+#density-btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+
+/* ── tab 2: the joint view ─────────────────────────────────────── */
+
+.joint-layout { gap: 20px; }
+.graph-toolbar { background: var(--surface-2); }
+.graph-pane, .case-panel { border-radius: 16px; }
+.legend { gap: 8px; padding-block: 11px; }
+.legend .lg {
+  padding: 2px 10px 2px 8px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  color: var(--ink);
+}
+.case-head { padding: 16px 18px 10px; }
+.case-head h2 { font-size: 17px; }
+.case-tabs { gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.case-tab {
+  border: 0; border-radius: 8px; padding: 6px 12px; transition: background .15s ease, color .15s ease;
+}
+.case-tab:hover { background: var(--surface-2); }
+.case-tab.active { background: var(--accent-soft); color: var(--ink); }
+.case-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.case-body { padding: 16px 18px; }
+.tick > span.tick-hide { opacity: 0; }
+
+/* ── tabs 4 and 5 ──────────────────────────────────────────────── */
+
+#simulate-body, #subset-body, #upload-body { max-inline-size: 1100px; }
+#simulate-body > p.view-lede, #subset-body > p.view-lede, #upload-body > p.view-lede { max-inline-size: 74ch; }
+.m-howto { margin-block: 0 14px; }
+#upload-body > h2 { font-size: 18px !important; letter-spacing: -.02em; margin-block-start: 28px !important; }
+
+/* An offline notice is a state, not an error: calm panel, plain label. */
+#simulate-body .chat-offline, #subset-body .chat-offline, #upload-body .chat-offline {
+  padding: 12px 14px; font-size: 13px; line-height: 1.5; border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line));
+  border-inline-start: 4px solid var(--warn);
+}
+
+/* Upload slots: a bank name and its file, as one card. */
+#upload-body .field[data-slot] {
+  padding: 12px 14px; margin-block-end: 10px !important; gap: 10px; color: var(--ink-2);
+  background: var(--surface); border: 1.5px dashed var(--line); border-radius: 14px;
+  transition: border-color .15s ease, background .15s ease;
+}
+#upload-body .field[data-slot]:hover, #upload-body .field[data-slot]:focus-within {
+  border-color: var(--accent); background: var(--accent-soft);
+}
+#upload-body .upload-bank-name {
+  font: inherit; font-size: 13px; padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+}
+#upload-body input[type="file"] { font: inherit; font-size: 12px; color: var(--ink-2); max-inline-size: 100%; }
+#upload-body input[type="file"]::file-selector-button {
+  font: inherit; font-weight: 600; font-size: 12px; padding: 7px 12px; margin-inline-end: 10px;
+  border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); cursor: pointer;
+}
+#upload-body input[type="file"]::file-selector-button:hover { border-color: var(--accent); }
+#simulate-body input, #simulate-body select, #subset-body input, #subset-body select {
+  font: inherit; color: var(--ink); background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px;
+}
+:is(input, select, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── Ask panel ─────────────────────────────────────────────────── */
+
+.chat { border-radius: 18px; }
+.chat-head { padding: 13px 16px; }
+.chat-head h2 { font-size: 14px; }
+.msg { line-height: 1.5; border-radius: 14px; }
+.msg.user { color: var(--on-accent); border-end-end-radius: 4px; }
+.msg.bot { border-end-start-radius: 4px; border: 1px solid var(--line); }
+.chat-form input { border-radius: 10px; }
+.chip { transition: border-color .15s ease, color .15s ease; }
+
+/* ── provenance footer ─────────────────────────────────────────── */
+
+main { padding-block-end: 8px; }
+.prov-footer {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  margin: 18px 20px 28px; padding-block-start: 12px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--ink-2);
+}
+.prov-footer[hidden] { display: none; }
+.prov-footer ul { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 0; list-style: none; }
+.prov-footer li { font-family: var(--mono); }
+.prov-footer .chip-synth { margin-inline-start: auto; }
+
+/* ── density ───────────────────────────────────────────────────── */
+
+html[data-density="compact"] body { font-size: 13px; }
+html[data-density="compact"] main { padding: 12px 14px; }
+html[data-density="compact"] .topbar { padding-block: 8px; }
+html[data-density="compact"] .tab { padding-block: 8px; }
+html[data-density="compact"] .metric-cards, html[data-density="compact"] .span-grid,
+html[data-density="compact"] .m-glance.ready, html[data-density="compact"] .bank-grid { gap: 10px; }
+html[data-density="compact"] .mcard, html[data-density="compact"] .g-tile, html[data-density="compact"] .span-card,
+html[data-density="compact"] .bank-card { padding-block: 10px; }
+html[data-density="compact"] .mcard .big { font-size: 26px; }
+html[data-density="compact"] .m-acc > summary { padding-block: 7px; }
+html[data-density="compact"] .ev-card { padding-block: 9px; }
+html[data-density="compact"] table.metrics td, html[data-density="compact"] table.metrics th { padding-block: 4px; }
+html[data-density="compact"] #metrics-body > h2 { margin-block-start: 28px !important; padding-block-start: 14px; }
+html[data-density="compact"] .hero-title { font-size: clamp(22px, 3vw, 32px); }
+html[data-density="compact"] .hero-canvas-wrap canvas { }
+
+/* ── high contrast ─────────────────────────────────────────────── */
+
+@media (prefers-contrast: more) {
+  :root { --line: #6b7285; --ink-3: var(--ink-2); }
+  .g-tile, .mcard, .bank-card, .m-acc, .hero-stage, .hero-race, .next-card, .graph-pane, .case-panel, .chat {
+    border-width: 2px;
+  }
+}
+@media (forced-colors: active) {
+  .g-tile, .mcard, .bank-card, .m-acc, .hero-stage, .hero-race, .next-card, .graph-pane, .case-panel, .chat, .coach {
+    border: 1px solid CanvasText; forced-color-adjust: auto;
+  }
+  .btn-primary, .g-bar, .g-vbar, .race-lane .fill { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .tab.active, .m-jump-btn.active, .case-tab.active { outline: 2px solid Highlight; }
+  :focus-visible { outline: 3px solid Highlight; }
+}
+
+/* ── print: one clean page per view ────────────────────────────── */
+
+@media print {
+  @page { margin: 14mm; }
+  :root, html[data-theme] { --bg: #fff; --surface: #fff; --surface-2: #f3f4f8; --ink: #000; --ink-2: #333; --ink-3: #444; --line: #bbb; --shadow: none; }
+  body { background: #fff; color: #000; font-size: 11px; }
+  .topbar-actions, .tabs, .hero-controls, .hero-next, .hero-tour, .hero-compare, .chat, .coach, .back-top,
+  .m-jump, .m-acc-tools, .g-actions, .explain-btn, .m-glance .g-jump, #race-play, .graph-toolbar .btn,
+  .graph-toolbar .switch, .case-tabs, #banner, .hero-divider, .btn, .btn-link, #live-proof-btn, #tamper-btn { display: none !important; }
+  .topbar { position: static; border: 0; padding: 0 0 8px; }
+  .scale { display: flex !important; }
+  main { padding: 0; }
+  *, *::before, *::after { box-shadow: none !important; animation: none !important; transition: none !important; }
+  .view.active { display: block; }
+  .joint-layout { display: block; }
+  .case-panel { max-height: none; margin-top: 12px; }
+  .case-body { overflow: visible; }
+  .case-pane { display: block !important; }
+  .hero-stage, .hero-race, .g-tile, .mcard, .span-card, .m-acc, .bank-card, .ev-card, .case-panel, table.metrics, .scope-row, .replay {
+    break-inside: avoid; border: 1px solid #bbb; background: #fff;
+  }
+  .m-glance.ready { grid-template-columns: repeat(2, 1fr); }
+  .g-bar, .g-vbar { transition: none !important; }
+  .m-glance .g-bar { width: calc((100% - 54px) * var(--wn)) !important; }
+  .m-glance .g-vbar { height: calc(100% * var(--hn)) !important; }
+  .table-scroll { overflow: visible; border: 0; }
+  a { color: inherit; text-decoration: none; }
+  .prov-footer { margin: 12px 0 0; }
+  .g-dot.missed, .g-dot.caught { border: 2px solid currentColor; box-shadow: none; }
+}
+
+/* Narrow screens: the header scrolls away instead of covering a fifth of the view. */
+@media (max-width: 640px) {
+  .topbar { position: static; }
+  html { scroll-padding-top: 12px; }
+  #print-btn { display: none; }
+}

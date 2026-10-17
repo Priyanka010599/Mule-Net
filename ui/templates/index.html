@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MuleNet: cross-bank mule detection</title>
+<meta name="description" content="Catch cross-bank money-mule rings without sharing customer data. Google Cloud AI Builder Cup demo: Gemini on Vertex AI, Confidential Space, XGBoost.">
+<meta property="og:title" content="MuleNet: cross-bank mule detection">
+<meta property="og:description" content="Catch cross-bank money-mule rings without sharing customer data.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#3b5bdb">
+<!-- Apply a saved theme before first paint, so a returning visitor does
+     not see the auto theme flash. Storage can throw: then auto stays. -->
+<script>try{var t=localStorage.getItem('mulenet-theme');if(t==='light'||t==='dark'||t==='auto')document.documentElement.dataset.theme=t}catch(e){}</script>
+<!-- The ring-of-nodes mark: three joined accounts, the exact pattern this
+     app detects. Replaces the empty data URI that used to suppress the
+     browser's default favicon request (and left the tab showing a generic
+     globe icon) -- there is now a real icon to serve instead. -->
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/static/app.css">
+<link rel="stylesheet" href="/static/hero.css">
+<link rel="stylesheet" href="/static/metrics.css">
+<link rel="stylesheet" href="/static/supervisory.css">
+<link rel="stylesheet" href="/static/labs.css">
+<link rel="stylesheet" href="/static/ux.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.34.3/cytoscape.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="/static/typography.js" type="module" defer></script>
+<script src="/static/app.js" type="module" defer></script>
+<script src="/static/metrics-polish.js" type="module" defer></script>
+<script src="/static/how-it-works.js" type="module" defer></script>
+<script src="/static/supervisory.js" type="module" defer></script>
+<script src="/static/labs.js" type="module" defer></script>
+<script src="/static/ux.js" type="module" defer></script>
+</head>
+<body>
+
+<div class="chrome" id="chrome">
+<header class="topbar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div>
+      <h1>MuleNet</h1>
+      <p class="tagline">Cross-bank mule ring detection <span class="chip-synth">Synthetic data</span></p>
+    </div>
+  </div>
+
+  <dl class="scale" id="scale-strip" aria-label="dataset scale">
+    <div><dt>accounts</dt><dd data-k="accounts">…</dd></div>
+    <div><dt>transfers</dt><dd data-k="transfers">…</dd></div>
+    <div><dt>ring groups flagged</dt><dd data-k="detected_rings_total">…</dd></div>
+    <div><dt>banks</dt><dd data-k="banks">…</dd></div>
+  </dl>
+
+  <div class="topbar-actions">
+    <button id="demo-btn" class="btn btn-primary" type="button"
+            title="One click: reset the demo, open the featured ring on tab 2 and play its replay">
+      <span class="dot"></span> Demo mode
+    </button>
+    <button id="theme-btn" class="btn btn-ghost" type="button"
+            aria-label="Theme: auto. Activate to change.">Theme: auto</button>
+    <button id="density-btn" class="btn btn-ghost" type="button" aria-pressed="false" title="Switch between comfortable and compact spacing on every tab">Density: comfortable</button>
+    <button id="print-btn" class="btn btn-ghost" type="button">Print</button>
+    <button id="guide-btn" class="btn btn-ghost" type="button">Guide</button>
+    <button id="jump-live-proof-btn" class="btn btn-primary" type="button"
+            title="Jump straight to the real, live-triggered transaction grading run and its Cloud Logging evidence">
+      <span class="dot"></span> Grade live
+    </button>
+    <button id="chat-btn" class="btn btn-ghost" type="button"
+            aria-expanded="false" aria-controls="chat">Ask</button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Steps">
+  <button role="tab" class="tab active" data-view="banks" aria-selected="true">
+    1 · Three banks, three fragments
+  </button>
+  <button role="tab" class="tab" data-view="joint" aria-selected="false">
+    2 · Joined up, the ring appears
+  </button>
+  <button role="tab" class="tab" data-view="metrics" aria-selected="false">
+    3 · What joining up buys
+  </button>
+  <button role="tab" class="tab" data-view="simulate" aria-selected="false">
+    4 · Build your own evasion attempt
+  </button>
+  <button role="tab" class="tab" data-view="subset" aria-selected="false">
+    5 · Load a subset, score it live
+  </button>
+</nav>
+</div>
+
+<div id="banner" class="banner" hidden></div>
+
+<!-- Ring-index provenance. Hidden entirely in the default snapshot mode,
+     where there is nothing to disclose. In MULENET_READ_MODE=bigquery it
+     states which of the two answered, and turns into a warning when the
+     query failed and a file answered instead: a silent fallback would let
+     a viewer read a file as a BigQuery result. -->
+<p id="read-source" class="read-source" hidden></p>
+
+<main>
+  <!-- ── view 1: bank tiles ─────────────────────────────────────── -->
+  <section id="view-banks" class="view active" role="tabpanel">
+    <details class="how-works" id="how-works">
+      <summary><span class="how-title">New here? How MuleNet works, in plain English</span></summary>
+      <p class="how-lede">
+        A <b>money mule</b> is an ordinary bank account used to pass criminal money along so its
+        origin is hard to trace. Criminals link many mules into a <b>ring</b> and spread it across
+        several banks, so every bank sees only a small piece and nothing looks wrong. MuleNet shows
+        what changes when the banks' signals are put together, without any bank handing over its
+        customers. Everything here is simulated data, not real customers.
+      </p>
+      <ol class="how-steps">
+        <li>
+          <h3>1. Each bank looks alone</h3>
+          <p>Every bank scores only its own customers and sees only the transfers it is part of.
+            One bank alone usually sees a harmless-looking fragment. That is this first tab.</p>
+        </li>
+        <li>
+          <h3>2. The banks are joined</h3>
+          <p>The accounts and their links (who pays whom, shared devices, the same ID document used
+            twice) are combined. Pieces that looked unrelated join into one ring. That is tab 2.</p>
+        </li>
+        <li>
+          <h3>3. Two checks decide who is suspicious</h3>
+          <p>A simple <b>speed rule</b> flags an account that many accounts pay into and that pays the
+            money on to several others within an hour. A learned <b>model</b> gives every account a
+            suspicion score from patterns like these. Flagged accounts that are connected are grouped
+            into a ring, with the reasons listed.</p>
+        </li>
+        <li>
+          <h3>4. Privacy is kept while joining</h3>
+          <p>Accounts appear only as scrambled IDs, never names. The joining runs inside a locked
+            Google Cloud environment (Confidential Space) that releases a bank's key only to the
+            exact code the banks approved. Tab 3 has a live proof you can run.</p>
+        </li>
+        <li>
+          <h3>5. We measure whether joining helps</h3>
+          <p>Tab 3 compares one bank alone against banks joined: how well real mules rank at the top
+            (PR-AUC), how many innocent accounts are flagged per mule caught, and who flags a ring
+            first. The <b>race to the exit</b> shows whether it was flagged before the money left.</p>
+        </li>
+        <li>
+          <h3>6. Try to break it, or use your own data</h3>
+          <p>Tab 4 lets you design a transfer pattern to slip past the detector. Tab 5 scores your own
+            files. The <b>Ask</b> button explains any result in words, and the case panel on tab 2 shows a
+            checked report for a compliance team, with the rules cited, once a ring has been verified.</p>
+        </li>
+      </ol>
+      <p class="how-go">
+        <button type="button" class="btn-link" data-goto="joint">See the joined ring</button>
+        <button type="button" class="btn-link" data-goto="metrics">See the numbers explained</button>
+      </p>
+    </details>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <h2 id="hero-title" class="hero-title">Each bank sees only a fragment of the ring.</h2>
+
+      <div class="hero-controls" role="group" aria-label="Ring and replay controls">
+        <div class="hero-picker">
+          <button id="hero-prev" class="btn btn-ghost btn-icon" type="button"
+                  aria-label="Previous ring">‹</button>
+          <label class="field">
+            <span>Ring</span>
+            <select id="hero-ring"></select>
+          </label>
+          <button id="hero-next" class="btn btn-ghost btn-icon" type="button"
+                  aria-label="Next ring">›</button>
+        </div>
+        <button id="hero-join" class="btn btn-primary" type="button" disabled>Join the banks</button>
+        <button id="hero-replay" class="btn btn-ghost" type="button" disabled>Replay</button>
+        <label class="switch hero-compare" title="Drag a divider across the graph to compare one bank with all three joined">
+          <input type="checkbox" id="hero-compare" role="switch">
+          <span>Drag to compare</span>
+        </label>
+        <label class="switch hero-tour" title="Steps through several rings by itself, then stops. Switch off to take over">
+          <input type="checkbox" id="hero-tour" role="switch" disabled>
+          <span>Auto-play tour</span>
+        </label>
+      </div>
+
+      <figure id="hero-stage" class="hero-stage" data-state="idle">
+        <div class="hero-body">
+          <div id="hero-canvas-wrap" class="hero-canvas-wrap">
+            <canvas id="hero-canvas" role="application" tabindex="0"
+                    aria-roledescription="network of accounts"
+                    aria-labelledby="hero-alt"
+                    aria-describedby="hero-help"></canvas>
+            <div id="hero-tip" class="hero-tip" role="tooltip" hidden></div>
+            <div id="hero-divider" class="hero-divider" role="slider" tabindex="0" hidden
+                 aria-label="Compare the fragments with the joined ring"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <span class="cmp-label left" aria-hidden="true">Fragments</span>
+              <span class="grip" aria-hidden="true">⇆</span>
+              <span class="cmp-label right" aria-hidden="true">Joined</span>
+            </div>
+            <div id="hero-status" class="hero-status" role="status" data-kind="loading">Loading the ring…</div>
+          </div>
+          <aside id="hero-panel" class="hero-panel" aria-label="Account details" hidden></aside>
+        </div>
+        <p id="hero-alt" class="sr-only"></p>
+        <p id="hero-help" class="sr-only">Hover or tap a ring account for details. With the keyboard, use the arrow keys to move between ring accounts and Enter to open details.</p>
+        <p id="hero-live" class="sr-only" aria-live="polite"></p>
+        <div class="hero-readout">
+          <p id="hero-tour-caption" class="hero-tour-caption" role="status" hidden></p>
+          <p id="hero-note" class="hero-note" hidden></p>
+          <div id="hero-result" class="hero-result" hidden>
+            <span class="hero-count-wrap"><b id="hero-count" class="hero-count">0</b> accounts exposed</span>
+            <button id="hero-open-joint" class="btn-link" type="button">Open the full joint view →</button>
+          </div>
+        </div>
+        <figcaption id="hero-caption" class="hero-caption">Replay of simulated transfers. Not live bank data.</figcaption>
+      </figure>
+    </section>
+
+    <section class="hero-race" id="hero-race" aria-labelledby="race-title" hidden>
+      <div class="race-head">
+        <h2 id="race-title">Race to the exit</h2>
+        <span id="race-clock" class="race-clock" hidden>T = 0.0 min</span>
+        <button id="race-play" class="btn btn-ghost" type="button" hidden>Play race</button>
+        <button type="button" class="btn-link explain-btn"
+                data-ask="Explain the race to the exit for this ring: when did single-bank and cross-bank flag it, compared with when the money reached the exit account?">Explain this</button>
+      </div>
+      <div id="race-body" class="race-body"></div>
+      <p id="race-note" class="race-note"></p>
+      <p id="race-same" class="race-same" role="note" hidden><span id="race-same-text"></span> <button type="button" class="btn-link" data-goto="metrics">See Metrics</button></p>
+      <p class="race-caption">Replay of simulated transfers. Not live bank data.</p>
+    </section>
+
+    <section class="hero-next" aria-label="Where to go next">
+      <button type="button" class="next-card" data-goto="simulate">
+        <span class="next-title">Try to evade it</span>
+        <span class="next-text">Design a transfer pattern and run it through the detector.</span>
+        <span class="next-go">Evade →</span>
+      </button>
+      <button type="button" class="next-card" data-goto="subset">
+        <span class="next-title">Score your own data</span>
+        <span class="next-text">Upload one CSV per bank and score it live.</span>
+        <span class="next-go">Your data →</span>
+      </button>
+      <button type="button" class="next-card" data-goto="live-proof">
+        <span class="next-title">See the live proof</span>
+        <span class="next-text">Run the check on Google's cloud.</span>
+        <span class="next-go">Live proof →</span>
+      </button>
+    </section>
+
+    <details class="hero-details" id="hero-details">
+      <summary>Details</summary>
+      <h2 style="font-size:15px;margin:10px 0 4px">What one bank sees alone</h2>
+      <p class="view-lede">
+        Each bank below sees <strong>only its own customers</strong> and ranks
+        them with <strong>only its own</strong> single-bank model. The ring highlighted in the
+        joint view is split across these tiles. No single tile holds enough of
+        it to look like a ring.
+      </p>
+      <div id="bank-grid" class="bank-grid"></div>
+      <p class="footnote" id="tie-note">Every account listed here was flagged by the binary velocity rule and each gets a model score near 1, so the score column ties at 1.0000. How well the model ranks accounts is measured in tab 3.</p>
+      <p class="footnote" id="bank-caveat"></p>
+      <p class="footnote" id="detector-note"></p>
+    </details>
+  </section>
+
+  <!-- ── view 2: joint graph ────────────────────────────────────── -->
+  <section id="view-joint" class="view" role="tabpanel">
+    <div class="joint-layout">
+      <div class="graph-pane">
+        <div class="graph-toolbar">
+          <label class="field">
+            <span>Ring</span>
+            <select id="ring-select"></select>
+          </label>
+          <button id="play-btn" class="btn btn-primary" type="button">Play replay</button>
+          <span class="zoom-group" role="group" aria-label="Zoom">
+            <button id="zoom-out-btn" class="btn btn-ghost" type="button" aria-label="Zoom out">−</button>
+            <button id="zoom-in-btn" class="btn btn-ghost" type="button" aria-label="Zoom in">+</button>
+          </span>
+          <button id="fit-btn" class="btn btn-ghost" type="button">Fit</button>
+          <label class="switch">
+            <input type="checkbox" id="context-toggle" checked>
+            <span>Show counterparties</span>
+          </label>
+          <span id="graph-bound" class="bound-note"></span>
+        </div>
+        <div class="cy-wrap">
+          <div id="cy" class="cy"></div>
+          <p id="cy-hint" class="cy-hint" role="status" aria-live="polite"><span class="cy-hint-fine">Ctrl + scroll to zoom</span><span class="cy-hint-touch">Pinch to zoom</span></p>
+        </div>
+        <div class="legend" id="legend">
+          <span class="lg bank-a">BANK_A</span>
+          <span class="lg bank-b">BANK_B</span>
+          <span class="lg bank-c">BANK_C</span>
+          <span class="lg role-source">source</span>
+          <span class="lg role-mule">mule</span>
+          <span class="lg role-collector">cash-out</span>
+          <span class="lg role-context">counterparty</span>
+        </div>
+        <!-- Replay. Every value here is precomputed in the snapshot from
+             ml/out/ring_detection_timeline.parquet; the page positions
+             already-derived offsets and derives no flag, threshold or
+             timing of its own. -->
+        <section id="replay" class="replay" aria-label="Detection replay"></section>
+      </div>
+
+      <aside class="case-panel" id="case-panel">
+        <header class="case-head">
+          <h2 id="case-title">…</h2>
+          <p id="case-sub" class="case-sub"></p>
+        </header>
+        <div class="case-tabs" role="tablist">
+          <button class="case-tab active" data-pane="signals" role="tab">Signals</button>
+          <button class="case-tab" data-pane="evidence" role="tab">Evidence</button>
+          <button class="case-tab" data-pane="report" role="tab">Report</button>
+          <button class="case-tab" data-pane="screen" role="tab">Check an account</button>
+        </div>
+        <div class="case-body">
+          <div class="case-pane active" id="pane-signals"></div>
+          <div class="case-pane" id="pane-evidence"></div>
+          <div class="case-pane" id="pane-report"></div>
+          <!-- GET /api/screen/{id}: check one account before a payment to it,
+               the way a bank's own transaction path would call this ahead of
+               a transfer. Independent of the open ring's own data. -->
+          <div class="case-pane" id="pane-screen"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ── view 3: metrics ────────────────────────────────────────── -->
+  <section id="view-metrics" class="view" role="tabpanel">
+    <div id="metrics-body"></div>
+  </section>
+
+  <!-- ── view 4: live evasion simulator ────────────────────────────
+       A judge's own pattern, run through ml.redteam.evaluate() on this
+       request -- no snapshot, no precomputation, a real HTTP round trip
+       to agents/ every time "Run" is pressed. Deliberately a separate
+       top-level view from any precomputed red-team result card: that one
+       is "here's what Gemini found"; this one is "you control it,
+       live". See docs/redteam.md. -->
+  <section id="view-simulate" class="view" role="tabpanel">
+    <div id="simulate-body"></div>
+  </section>
+
+  <!-- ── view 5: live data-subset panel ─────────────────────────────
+       A caller picks a real (bounded) time horizon and optional bank
+       filter and gets two REAL, sequential HTTP round trips: POST
+       /api/subset/load (ml.features.build_features over the bounded
+       transfer slice -- feature engineering only, no rule) then POST
+       /api/subset/score (the same load, rerun, plus
+       ml.rule.velocity_decision). Separate top-level view from the
+       evasion simulator: that one is a synthetic graph a judge designs;
+       this one is a real, bounded slice of the actual 572,890-transfer
+       dataset. See docs/redteam.md. -->
+  <section id="view-subset" class="view" role="tabpanel">
+    <div id="subset-body"></div>
+    <div id="upload-body"></div>
+  </section>
+</main>
+
+<footer id="prov-footer" class="prov-footer" hidden></footer>
+
+<!-- ── chat dock ───────────────────────────────────────────────── -->
+<aside id="chat" class="chat" hidden aria-label="Agent chat">
+  <header class="chat-head">
+    <h2>Ask MuleNet</h2>
+    <span class="pill" id="chat-backend">{{ chat_backend }}</span>
+    <button id="chat-close" class="btn btn-ghost" type="button" aria-label="Close chat">×</button>
+  </header>
+  <div id="chat-log" class="chat-log" role="log" aria-live="polite" aria-label="Conversation"></div>
+  <div id="chat-examples" class="chat-chips"></div>
+  <div id="chat-chips" class="chat-chips"></div>
+  <form id="chat-form" class="chat-form">
+    <input id="chat-input" type="text" autocomplete="off"
+           placeholder="Trace the money flow…" aria-label="Ask MuleNet a question">
+    <button class="btn btn-primary" type="submit">Send</button>
+  </form>
+</aside>
+
+</body>
+</html>

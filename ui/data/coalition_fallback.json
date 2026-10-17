@@ -1,0 +1,544 @@
+{
+  "generated_at": "2026-10-04T14:20:38.468029+00:00",
+  "metric": "ring_recall",
+  "metric_definition": "Share of the dataset's true rings for which the coalition flags at least one pass-through mule or collector, using the VELOCITY RULE's hard decision (ml.rule.velocity_decision over the coalition's joined view). Denominator is every ring in the dataset, including rings the coalition holds no account in.",
+  "two_variants": "ring_recall is the SHIPPED rule, whose bank-spread clause (distinct_counterparty_banks >= 2) is uncomputable inside one bank -- so it fires on exactly zero accounts at N=1, and that point is the rule declining to fire, not an absence of signal. ring_recall_no_spread is the same rule with that clause dropped: the generous reading, and the honest baseline to quote a gain against. ml/rule.py reports its own single_bank variant the same way and for the same reason.",
+  "not_comparable_to_claims": "docs/claims.md quotes ring recall at the XGBoost scorer's 1%-FPR operating point. This is the velocity rule's hard decision instead, which is what makes sweeping every coalition cheap. The two answer different questions and must not be read as one series.",
+  "true_rings_total": 120,
+  "worlds": {
+    "three_bank": {
+      "label": "3 real banks",
+      "is_real_partition": true,
+      "note": "The dataset as generated. Every point here is measured on the real partition.",
+      "by_size": [
+        {
+          "banks_joined": 1,
+          "coalitions": 3,
+          "ring_recall": 0.0,
+          "ring_recall_min": 0.0,
+          "ring_recall_max": 0.0,
+          "ring_recall_no_spread": 0.12777777777777777,
+          "ring_recall_reachable": 0.0,
+          "rings_caught": 0.0,
+          "rings_reachable": 78.33333333333333,
+          "rings_formed": 0.0,
+          "flagged_accounts": 0.0,
+          "accounts_visible": 10000.0
+        },
+        {
+          "banks_joined": 2,
+          "coalitions": 3,
+          "ring_recall": 0.6027777777777777,
+          "ring_recall_min": 0.575,
+          "ring_recall_max": 0.625,
+          "ring_recall_no_spread": 0.6027777777777777,
+          "ring_recall_reachable": 0.671858774662513,
+          "rings_caught": 72.33333333333333,
+          "rings_reachable": 107.66666666666667,
+          "rings_formed": 23.0,
+          "flagged_accounts": 276.0,
+          "accounts_visible": 20000.0
+        },
+        {
+          "banks_joined": 3,
+          "coalitions": 1,
+          "ring_recall": 1.0,
+          "ring_recall_min": 1.0,
+          "ring_recall_max": 1.0,
+          "ring_recall_no_spread": 1.0,
+          "ring_recall_reachable": 1.0,
+          "rings_caught": 120.0,
+          "rings_reachable": 120.0,
+          "rings_formed": 45.0,
+          "flagged_accounts": 676.0,
+          "accounts_visible": 30000.0
+        }
+      ],
+      "coalitions": [
+        {
+          "banks": [
+            "BANK_A"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 10000,
+          "transfers_visible": 73708,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 82,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.13333333333333333,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 36,
+          "rings_caught_no_spread": 16
+        },
+        {
+          "banks": [
+            "BANK_B"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 10000,
+          "transfers_visible": 75100,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 81,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.13333333333333333,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 32,
+          "rings_caught_no_spread": 16
+        },
+        {
+          "banks": [
+            "BANK_C"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 10000,
+          "transfers_visible": 74558,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 72,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.11666666666666667,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 36,
+          "rings_caught_no_spread": 14
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_B"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 20000,
+          "transfers_visible": 266172,
+          "flagged_accounts": 312,
+          "rings_formed": 28,
+          "rings_caught": 73,
+          "rings_reachable": 107,
+          "true_rings_total": 120,
+          "ring_recall": 0.6083333333333333,
+          "ring_recall_no_spread": 0.6083333333333333,
+          "ring_recall_reachable": 0.6822429906542056,
+          "flagged_accounts_no_spread": 312,
+          "rings_caught_no_spread": 73
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_C"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 20000,
+          "transfers_visible": 263870,
+          "flagged_accounts": 239,
+          "rings_formed": 18,
+          "rings_caught": 69,
+          "rings_reachable": 108,
+          "true_rings_total": 120,
+          "ring_recall": 0.575,
+          "ring_recall_no_spread": 0.575,
+          "ring_recall_reachable": 0.6388888888888888,
+          "flagged_accounts_no_spread": 239,
+          "rings_caught_no_spread": 69
+        },
+        {
+          "banks": [
+            "BANK_B",
+            "BANK_C"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 20000,
+          "transfers_visible": 266214,
+          "flagged_accounts": 277,
+          "rings_formed": 23,
+          "rings_caught": 75,
+          "rings_reachable": 108,
+          "true_rings_total": 120,
+          "ring_recall": 0.625,
+          "ring_recall_no_spread": 0.625,
+          "ring_recall_reachable": 0.6944444444444444,
+          "flagged_accounts_no_spread": 277,
+          "rings_caught_no_spread": 75
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_B",
+            "BANK_C"
+          ],
+          "banks_joined": 3,
+          "accounts_visible": 30000,
+          "transfers_visible": 572890,
+          "flagged_accounts": 676,
+          "rings_formed": 45,
+          "rings_caught": 120,
+          "rings_reachable": 120,
+          "true_rings_total": 120,
+          "ring_recall": 1.0,
+          "ring_recall_no_spread": 1.0,
+          "ring_recall_reachable": 1.0,
+          "flagged_accounts_no_spread": 676,
+          "rings_caught_no_spread": 120
+        }
+      ]
+    },
+    "four_bank": {
+      "label": "4 banks (BANK_C split)",
+      "is_real_partition": false,
+      "note": "BANK_D is half of BANK_C's customers, chosen by hashing the account id. Every account, transfer, device and document is real and unchanged; only the bank_id label moved. This redivides the same market among four banks rather than adding a fourth bank's customers, so the N=1 baseline is worse than the real world's and the 1-to-4 gain is larger than a real fourth bank would give. Its N=3 point is three banks over a different partition, not the repo's headline three-bank number.",
+      "by_size": [
+        {
+          "banks_joined": 1,
+          "coalitions": 4,
+          "ring_recall": 0.0,
+          "ring_recall_min": 0.0,
+          "ring_recall_max": 0.0,
+          "ring_recall_no_spread": 0.07708333333333334,
+          "ring_recall_reachable": 0.0,
+          "rings_caught": 0.0,
+          "rings_reachable": 68.25,
+          "rings_formed": 0.0,
+          "flagged_accounts": 0.0,
+          "accounts_visible": 7500.0
+        },
+        {
+          "banks_joined": 2,
+          "coalitions": 6,
+          "ring_recall": 0.325,
+          "ring_recall_min": 0.11666666666666667,
+          "ring_recall_max": 0.6083333333333333,
+          "ring_recall_no_spread": 0.325,
+          "ring_recall_reachable": 0.3834774103575776,
+          "rings_caught": 39.0,
+          "rings_reachable": 98.66666666666667,
+          "rings_formed": 12.5,
+          "flagged_accounts": 125.66666666666667,
+          "accounts_visible": 15000.0
+        },
+        {
+          "banks_joined": 3,
+          "coalitions": 4,
+          "ring_recall": 0.725,
+          "ring_recall_min": 0.575,
+          "ring_recall_max": 0.8583333333333333,
+          "ring_recall_no_spread": 0.725,
+          "ring_recall_reachable": 0.7619047619047619,
+          "rings_caught": 87.0,
+          "rings_reachable": 113.5,
+          "rings_formed": 28.25,
+          "flagged_accounts": 365.75,
+          "accounts_visible": 22500.0
+        },
+        {
+          "banks_joined": 4,
+          "coalitions": 1,
+          "ring_recall": 1.0,
+          "ring_recall_min": 1.0,
+          "ring_recall_max": 1.0,
+          "ring_recall_no_spread": 1.0,
+          "ring_recall_reachable": 1.0,
+          "rings_caught": 120.0,
+          "rings_reachable": 120.0,
+          "rings_formed": 45.0,
+          "flagged_accounts": 676.0,
+          "accounts_visible": 30000.0
+        }
+      ],
+      "coalitions": [
+        {
+          "banks": [
+            "BANK_A"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 10000,
+          "transfers_visible": 73708,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 82,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.13333333333333333,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 36,
+          "rings_caught_no_spread": 16
+        },
+        {
+          "banks": [
+            "BANK_B"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 10000,
+          "transfers_visible": 75100,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 81,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.13333333333333333,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 32,
+          "rings_caught_no_spread": 16
+        },
+        {
+          "banks": [
+            "BANK_C"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 5031,
+          "transfers_visible": 19420,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 57,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.025,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 4,
+          "rings_caught_no_spread": 3
+        },
+        {
+          "banks": [
+            "BANK_D"
+          ],
+          "banks_joined": 1,
+          "accounts_visible": 4969,
+          "transfers_visible": 17756,
+          "flagged_accounts": 0,
+          "rings_formed": 0,
+          "rings_caught": 0,
+          "rings_reachable": 53,
+          "true_rings_total": 120,
+          "ring_recall": 0.0,
+          "ring_recall_no_spread": 0.016666666666666666,
+          "ring_recall_reachable": 0.0,
+          "flagged_accounts_no_spread": 3,
+          "rings_caught_no_spread": 2
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_B"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 20000,
+          "transfers_visible": 266172,
+          "flagged_accounts": 312,
+          "rings_formed": 28,
+          "rings_caught": 73,
+          "rings_reachable": 107,
+          "true_rings_total": 120,
+          "ring_recall": 0.6083333333333333,
+          "ring_recall_no_spread": 0.6083333333333333,
+          "ring_recall_reachable": 0.6822429906542056,
+          "flagged_accounts_no_spread": 312,
+          "rings_caught_no_spread": 73
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_C"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 15031,
+          "transfers_visible": 152741,
+          "flagged_accounts": 92,
+          "rings_formed": 8,
+          "rings_caught": 34,
+          "rings_reachable": 103,
+          "true_rings_total": 120,
+          "ring_recall": 0.2833333333333333,
+          "ring_recall_no_spread": 0.2833333333333333,
+          "ring_recall_reachable": 0.3300970873786408,
+          "flagged_accounts_no_spread": 92,
+          "rings_caught_no_spread": 34
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_D"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 14969,
+          "transfers_visible": 147455,
+          "flagged_accounts": 102,
+          "rings_formed": 7,
+          "rings_caught": 33,
+          "rings_reachable": 104,
+          "true_rings_total": 120,
+          "ring_recall": 0.275,
+          "ring_recall_no_spread": 0.275,
+          "ring_recall_reachable": 0.3173076923076923,
+          "flagged_accounts_no_spread": 102,
+          "rings_caught_no_spread": 33
+        },
+        {
+          "banks": [
+            "BANK_B",
+            "BANK_C"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 15031,
+          "transfers_visible": 154756,
+          "flagged_accounts": 116,
+          "rings_formed": 17,
+          "rings_caught": 40,
+          "rings_reachable": 102,
+          "true_rings_total": 120,
+          "ring_recall": 0.3333333333333333,
+          "ring_recall_no_spread": 0.3333333333333333,
+          "ring_recall_reachable": 0.39215686274509803,
+          "flagged_accounts_no_spread": 116,
+          "rings_caught_no_spread": 40
+        },
+        {
+          "banks": [
+            "BANK_B",
+            "BANK_D"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 14969,
+          "transfers_visible": 149176,
+          "flagged_accounts": 96,
+          "rings_formed": 12,
+          "rings_caught": 40,
+          "rings_reachable": 104,
+          "true_rings_total": 120,
+          "ring_recall": 0.3333333333333333,
+          "ring_recall_no_spread": 0.3333333333333333,
+          "ring_recall_reachable": 0.38461538461538464,
+          "flagged_accounts_no_spread": 96,
+          "rings_caught_no_spread": 40
+        },
+        {
+          "banks": [
+            "BANK_C",
+            "BANK_D"
+          ],
+          "banks_joined": 2,
+          "accounts_visible": 10000,
+          "transfers_visible": 74558,
+          "flagged_accounts": 36,
+          "rings_formed": 3,
+          "rings_caught": 14,
+          "rings_reachable": 72,
+          "true_rings_total": 120,
+          "ring_recall": 0.11666666666666667,
+          "ring_recall_no_spread": 0.11666666666666667,
+          "ring_recall_reachable": 0.19444444444444445,
+          "flagged_accounts_no_spread": 36,
+          "rings_caught_no_spread": 14
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_B",
+            "BANK_C"
+          ],
+          "banks_joined": 3,
+          "accounts_visible": 25031,
+          "transfers_visible": 405441,
+          "flagged_accounts": 476,
+          "rings_formed": 35,
+          "rings_caught": 101,
+          "rings_reachable": 119,
+          "true_rings_total": 120,
+          "ring_recall": 0.8416666666666667,
+          "ring_recall_no_spread": 0.8416666666666667,
+          "ring_recall_reachable": 0.8487394957983193,
+          "flagged_accounts_no_spread": 476,
+          "rings_caught_no_spread": 101
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_B",
+            "BANK_D"
+          ],
+          "banks_joined": 3,
+          "accounts_visible": 24969,
+          "transfers_visible": 396239,
+          "flagged_accounts": 471,
+          "rings_formed": 37,
+          "rings_caught": 103,
+          "rings_reachable": 119,
+          "true_rings_total": 120,
+          "ring_recall": 0.8583333333333333,
+          "ring_recall_no_spread": 0.8583333333333333,
+          "ring_recall_reachable": 0.865546218487395,
+          "flagged_accounts_no_spread": 471,
+          "rings_caught_no_spread": 103
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_C",
+            "BANK_D"
+          ],
+          "banks_joined": 3,
+          "accounts_visible": 20000,
+          "transfers_visible": 263870,
+          "flagged_accounts": 239,
+          "rings_formed": 18,
+          "rings_caught": 69,
+          "rings_reachable": 108,
+          "true_rings_total": 120,
+          "ring_recall": 0.575,
+          "ring_recall_no_spread": 0.575,
+          "ring_recall_reachable": 0.6388888888888888,
+          "flagged_accounts_no_spread": 239,
+          "rings_caught_no_spread": 69
+        },
+        {
+          "banks": [
+            "BANK_B",
+            "BANK_C",
+            "BANK_D"
+          ],
+          "banks_joined": 3,
+          "accounts_visible": 20000,
+          "transfers_visible": 266214,
+          "flagged_accounts": 277,
+          "rings_formed": 23,
+          "rings_caught": 75,
+          "rings_reachable": 108,
+          "true_rings_total": 120,
+          "ring_recall": 0.625,
+          "ring_recall_no_spread": 0.625,
+          "ring_recall_reachable": 0.6944444444444444,
+          "flagged_accounts_no_spread": 277,
+          "rings_caught_no_spread": 75
+        },
+        {
+          "banks": [
+            "BANK_A",
+            "BANK_B",
+            "BANK_C",
+            "BANK_D"
+          ],
+          "banks_joined": 4,
+          "accounts_visible": 30000,
+          "transfers_visible": 572890,
+          "flagged_accounts": 676,
+          "rings_formed": 45,
+          "rings_caught": 120,
+          "rings_reachable": 120,
+          "true_rings_total": 120,
+          "ring_recall": 1.0,
+          "ring_recall_no_spread": 1.0,
+          "ring_recall_reachable": 1.0,
+          "flagged_accounts_no_spread": 676,
+          "rings_caught_no_spread": 120
+        }
+      ]
+    }
+  }
+}
