@@ -146,17 +146,22 @@ We state limits plainly:
 ## Built on Google Cloud
 
 **Live and on the serving path:** Gemini on Vertex AI, Vertex AI Search
-(RBI/PMLA/FIU-IND regulation index), BigQuery (the agents service's data
-source as of 2026-10-15 -- `accounts`, `transfers`, `rings` and 8 other
-tables, behind `MULENET_AGENTS_DATA_SOURCE=bigquery`; a parquet fallback
-still exists), Pub/Sub, Cloud Run, Confidential Space, Cloud KMS, Secret
+(RBI/PMLA/FIU-IND regulation index), Google ADK (the agent framework),
+BigQuery (the agents service's data source as of 2026-10-15 --
+`accounts`, `transfers`, `rings` and 8 other tables, behind
+`MULENET_AGENTS_DATA_SOURCE=bigquery`; a parquet fallback still exists),
+Pub/Sub, Cloud Run, Confidential Space, Cloud KMS, Cloud Logging, Secret
 Manager, Cloud Storage, Cloud Build, Artifact Registry.
-**Live, but not yet on the serving path:** Vertex AI Model Registry (a
-lineage record only, the model is not servable) and BigQuery's own
-`features` table specifically (still not published, unlike the 9 tables
-above).
-**Built, not yet connected to the live app:** Document AI KYC parser
-(validated offline on 50 synthetic documents).
+**Registered, not endpoint-served:** the trained XGBoost models (A/B/C)
+sit in Vertex AI Model Registry as a lineage record -- no Vertex Endpoint
+exists, so nothing calls Vertex AI for a prediction. The live app scores
+every request with these same model files, loaded and run in-process
+(`ml/model_runtime.py`). Used constantly; just not through Vertex's
+serving layer.
+**Live, one table missing:** BigQuery's `features` table isn't published
+yet, unlike the 9 tables above.
+**Built, not connected:** Document AI KYC parser (validated offline on
+50 synthetic documents).
 
 ## Run it yourself
 

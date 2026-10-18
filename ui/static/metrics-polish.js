@@ -58,7 +58,11 @@ function watchSections(headings, nav) {
 
 /* ── expandable rows ───────────────────────────────────────────── */
 
-const SECTION_KEYS = { roadmap: 'Production roadmap', redteam: 'attacker', proof: 'Proof this ran' };
+const SECTION_KEYS = {
+  roadmap: ['Measured Results & Research Findings', 'Production Readiness & Open Challenges'],
+  redteam: 'attacker',
+  proof: 'Proof this ran',
+};
 
 function sectionNodes(h2) {
   const out = [];
@@ -126,10 +130,12 @@ function foldProof(h2) {
 function foldSections() {
   const hs = [...body.querySelectorAll(':scope > h2')];
   const find = (needle) => hs.find((h) => h.textContent.includes(needle));
-  const roadmap = find(SECTION_KEYS.roadmap);
+  SECTION_KEYS.roadmap.forEach((needle) => {
+    const h = find(needle);
+    if (h) collapseCards(h, true);
+  });
   const redteam = find(SECTION_KEYS.redteam);
   const proof = find(SECTION_KEYS.proof);
-  if (roadmap) collapseCards(roadmap, true);
   if (redteam) collapseCards(redteam, true);
   if (proof) foldProof(proof);
 }

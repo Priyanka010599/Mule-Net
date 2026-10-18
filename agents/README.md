@@ -1,8 +1,18 @@
 # agents
 
-ADK agents on Gemini (Vertex AI), their tools, the verification gate, and the
-evaluation harness. Owned by the **agents-engineer** agent. Tool signatures and
-contracts come from `shared/`.
+Google ADK agents on Gemini (Vertex AI), their tools, the verification gate,
+and the evaluation harness. Owned by the **agents-engineer** agent. Tool
+signatures and contracts come from `shared/`.
+
+Beyond Gemini itself, this service is also where most of MuleNet's other
+Google Cloud usage actually runs: **BigQuery** is this service's live data
+source (`agents/data.py`, `MULENET_AGENTS_DATA_SOURCE=bigquery`); the
+`report` agent's `search_regulations` tool calls **Vertex AI Search**; the
+live-proof feature (`agents/live_proof_service.py`,
+`agents/live_proof_guard.py`) provisions and tears down real **Confidential
+Space** VMs on **Compute Engine**, gated by **Cloud KMS**, and reads back the
+run's own **Cloud Logging** entries (`agents/live_proof_logs.py`) as
+independently auditable proof.
 
 ## Four agents, and a verifier that is not one of them
 

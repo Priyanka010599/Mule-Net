@@ -8,10 +8,14 @@ The design is [`docs/data_sharing.md`](../docs/data_sharing.md). The runbook,
 the honest status, and the exact commands per stage are
 [`docs/enclave.md`](../docs/enclave.md).
 
-**Status:** the workload is built and tested; **nothing has been executed
-against Google Cloud.** No KMS key, no attestation policy, no Confidential VM.
-Treat every attestation claim as a prediction until a credentialed run confirms
-it.
+**Status:** live, not just built. The UI's "Grade transactions live" and "Try
+tampered code" buttons trigger real runs: a real **Confidential Space** VM on
+**Compute Engine**, a real **Cloud KMS** key release (or a real refusal, for
+the wrong key or a tampered image), and a real **Cloud Logging** trail of
+that VM's creation and deletion -- independently checkable, not asserted.
+Per-bank outbox bundles are written to **Cloud Storage**. Every run is capped
+at 10/day by `agents/live_proof_service.py`, a deliberate limit on a real
+paid VM, not a cost problem.
 
 The key is released only to a **non-debug** Confidential Space image: the
 `confidential-space-debug` family allows operator SSH, so a VM running it must

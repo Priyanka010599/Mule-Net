@@ -6,6 +6,13 @@ Owned by the **platform-engineer** agent. Everything is parameterized by
 `PROJECT_ID` and `REGION`; no project IDs, keys, or secrets are ever
 committed here.
 
+`setup.sh` also grants the IAM roles the rest of the stack depends on:
+**Secret Manager** secret access (read-only, per service account), the
+**Cloud KMS** and **Compute Engine** permissions the live-proof enclave
+needs to create/delete **Confidential Space** VMs and release keys, and
+the **Cloud Logging** read access that makes a run's own audit trail
+checkable from the live app.
+
 | File | What it is |
 |---|---|
 | `setup.sh` | One-time project setup: 10 APIs, Artifact Registry repo, one least-privilege service account per service with IAM. Already run. |

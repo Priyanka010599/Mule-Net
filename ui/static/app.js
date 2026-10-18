@@ -1825,13 +1825,127 @@ function coalitionSection(c) {
    reason it was deferred, not just "not done yet". */
 function productionRoadmapSection() {
   return `
-    <h2 style="font-size:15px;margin:22px 0 4px">Production roadmap</h2>
+    <h2 style="font-size:15px;margin:22px 0 4px;border-left:3px solid var(--accent);padding-left:10px">Measured Results &amp; Research Findings</h2>
+    <p class="view-lede" style="margin-bottom:10px">
+      What's measured here is real, against this project's own synthetic
+      data and against an independent public benchmark -- named plainly,
+      because a system that states its own gaps is more credible than one
+      that hides them.
+    </p>
+
+    <div class="ev-card">
+      <h4>What drives T=5m detection: identity, then account age, then nothing</h4>
+      <p>Model A's shipped T=5m PR-AUC is 0.6220. Drop its 4 identity
+        features (device/KYC reuse) and PR-AUC falls to 0.2448 -- identity
+        reuse is the dominant early-detection signal, not a minor
+        supplement. Drop <span class="mono">account_age_days</span> too (the
+        11-feature set Model C and the Judge Upload path actually use) and
+        it falls again to 0.0708. See <span class="mono">docs/claims.md</span>
+        (<span class="mono">pr_auc_t5_cross_bank</span>,
+        <span class="mono">ablation_t5_drop_all_identity</span>,
+        <span class="mono">ablation_t5_drop_all_identity_and_age</span>) and
+        <span class="mono">ml/experiments/ablation/README.md</span>.</p>
+    </div>
+
+    <div class="ev-card">
+      <h4>IBM's own public benchmark: about 0.08 PR-AUC on an independent dataset</h4>
+      <p>On IBM's AML HI-Small public benchmark -- independently generated,
+        a different topology, no device/KYC signal at all -- our reduced
+        transfer-only feature family scores 0.0813 PR-AUC, 5-9x the dataset's
+        0.0102 base rate. Not comparable to this dataset's own published GNN
+        benchmarks (different features, split, task framing) and not part
+        of this project's own claims. See
+        <span class="mono">docs/claims.md</span>
+        (<span class="mono">ibm_aml_xgboost_pr_auc</span>) and
+        <span class="mono">ml/experiments/ibm_aml/README.md</span>.</p>
+    </div>
+
+    <div class="ev-card">
+      <h4>IBM benchmark: "is it in a big connected cluster?" is not a detector</h4>
+      <p>On the same IBM AML HI-Small data, 72% of all 515,088 accounts sit in
+        one connected component. A baseline that flags any account in a large
+        component reaches high recall only by flagging 71.9% of all
+        innocent accounts -- so cluster membership alone says almost nothing
+        at this scale, and we do not count it as a result. See
+        <span class="mono">docs/claims.md</span>
+        (<span class="mono">ibm_aml_giant_component_realized_fpr</span>) and the
+        giant-component section of
+        <span class="mono">ml/experiments/ibm_aml/README.md</span>.</p>
+    </div>
+
+    <div class="ev-card">
+      <h4>False alerts stay flat as more banks join (N=3, 5, 6)</h4>
+      <p>Scaling the simulator to 5- and 6-bank worlds, the
+        flagged-accounts-per-ring-caught ratio at full join is 5.63 (N=3,
+        shipped), 5.32 (N=5), 5.28 (N=6) -- flat to mildly improving, not
+        rising, as more banks join. Ring recall itself keeps climbing to
+        100% once every bank has joined, for N=5 and N=6 exactly as for
+        N=3 -- the join effect is not a 3-bank artifact. Still
+        synthetic-world only; not yet validated against real additional
+        banks. See <span class="mono">ml/experiments/n_banks/README.md</span>.</p>
+    </div>
+
+    <details class="m-acc">
+      <summary><h4>Additional experiments</h4></summary>
+      <div class="m-acc-body">
+        <div class="ev-card">
+          <h4>Isolation Forest: unsupervised, no labels -- beats the rule on a slow pattern, loses to XGBoost everywhere</h4>
+          <p>An unlabelled anomaly detector, never shown which accounts are mules,
+            given a 1%-per-bank alert budget. Tested on two worlds: the canonical
+            dataset, and a separate "slow-drip" overlay built to evade the
+            shipped velocity rule (smaller amounts, hops paced just under its
+            speed ceiling). On slow-drip, cross-bank: Isolation Forest catches
+            60.0% of rings against the velocity rule's 67.5% and XGBoost's
+            89.2% -- it beats the rule single-bank (41.7% vs 10.8%) but trails
+            XGBoost everywhere, in both worlds, by double digits. <b>Not a
+            general detector of unseen fraud</b> -- it was measured against one
+            designed pattern, not fraud nobody anticipated, and it is not
+            deployed: the shipped rule and models are unchanged. See
+            <span class="mono">docs/claims.md</span>'s "Slow-drip stress test"
+            section and <span class="mono">ml/experiments/slow_drip/run.py</span>.</p>
+        </div>
+
+        <div class="ev-card">
+          <h4>GNN + XGBoost: a modest gain, not shipped</h4>
+          <p>An inductively-trained graph neural network (test accounts and
+            their edges fully absent during training), combined with XGBoost by
+            simple score averaging, reaches 0.6654 T=5m PR-AUC against XGBoost
+            alone's 0.6212 -- +0.044 absolute, about 7% relative. Measured
+            honestly on a merged experiment branch; <b>the shipped detector is
+            unchanged</b> -- nothing here is registered in Vertex or wired into
+            the live app. See <span class="mono">docs/claims.md</span>
+            (<span class="mono">gnn_xgb_t5_score_averaging</span>) and
+            <span class="mono">ml/experiments/gnn_xgb/README.md</span>.</p>
+        </div>
+
+        <div class="ev-card">
+          <h4>Adversarial retraining: inconclusive</h4>
+          <p>Retraining a copy of Model A on self-generated evasion strategies
+            looked like it caught held-out strategies, surviving two confound
+            controls. It didn't survive a third: the retrained model also
+            flagged most benign synthetic accounts it was explicitly told were
+            innocent, built by the same generator but never part of a ring. The
+            honest read is that retraining taught the model to recognise this
+            generator's structural fingerprint, not the targeted evasion
+            behaviour -- so the result is inconclusive, not evidence of
+            robustness. Not merged, not deployed; this is not a claim in
+            <span class="mono">docs/claims.md</span>, by design. See the
+            <span class="mono">exp/adversarial</span> branch,
+            <span class="mono">ml/experiments/adversarial/README.md</span>, and
+            <span class="mono">docs/EVIDENCE.md</span>.</p>
+        </div>
+      </div>
+    </details>
+
+    <h2 style="font-size:15px;margin:22px 0 4px;border-left:3px solid var(--warn);padding-left:10px">Production Readiness &amp; Open Challenges</h2>
     <p class="view-lede" style="margin-bottom:10px">
       What's built is real and verified live against Google Cloud, not
       simulated. What's listed here is what a production deployment would
       still need -- named plainly, because a system that states its own
       gaps is more credible than one that hides them.
     </p>
+
+    <h3 style="font-size:12px;margin:14px 0 6px">Required engineering, security &amp; compliance work</h3>
 
     <div class="ev-card">
       <h4>Still to do: replace the shared demo key</h4>
@@ -1875,123 +1989,29 @@ function productionRoadmapSection() {
     </div>
 
     <div class="ev-card">
-      <h4>Still to do: catch fraud patterns we haven't seen before</h4>
-      <p>Every detector in this system -- the shipped velocity rule and both
-        trained XGBoost models -- is <b>supervised</b>: trained or tuned
-        against labelled examples of the specific pass-through pattern this
-        dataset's ground truth defines. None of them can recognise a
-        genuinely novel fraud pattern that looks nothing like anything in
-        that label set, the way an unsupervised anomaly-detection method
-        might. No such method exists in this codebase today. This is a real
-        limitation of the detection approach, not an implementation gap to
-        be filled in later without rethinking the approach itself.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>What drives T=5m detection: identity, then account age, then nothing</h4>
-      <p>Model A's shipped T=5m PR-AUC is 0.6220. Drop its 4 identity
-        features (device/KYC reuse) and PR-AUC falls to 0.2448 -- identity
-        reuse is the dominant early-detection signal, not a minor
-        supplement. Drop <span class="mono">account_age_days</span> too (the
-        11-feature set Model C and the Judge Upload path actually use) and
-        it falls again to 0.0708. See <span class="mono">docs/claims.md</span>
-        (<span class="mono">pr_auc_t5_cross_bank</span>,
-        <span class="mono">ablation_t5_drop_all_identity</span>,
-        <span class="mono">ablation_t5_drop_all_identity_and_age</span>) and
-        <span class="mono">ml/experiments/ablation/README.md</span>.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>IBM's own public benchmark: about 0.08 PR-AUC on an independent dataset</h4>
-      <p>On IBM's AML HI-Small public benchmark -- independently generated,
-        a different topology, no device/KYC signal at all -- our reduced
-        transfer-only feature family scores 0.0813 PR-AUC, 5-9x the dataset's
-        0.0102 base rate. Not comparable to this dataset's own published GNN
-        benchmarks (different features, split, task framing) and not part
-        of this project's own claims. See
-        <span class="mono">docs/claims.md</span>
-        (<span class="mono">ibm_aml_xgboost_pr_auc</span>) and
-        <span class="mono">ml/experiments/ibm_aml/README.md</span>.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>IBM benchmark: "is it in a big connected cluster?" is not a detector</h4>
-      <p>On the same IBM AML HI-Small data, 72% of all 515,088 accounts sit in
-        one connected component. A baseline that flags any account in a large
-        component reaches high recall only by flagging 71.9% of all
-        innocent accounts -- so cluster membership alone says almost nothing
-        at this scale, and we do not count it as a result. See
-        <span class="mono">docs/claims.md</span>
-        (<span class="mono">ibm_aml_giant_component_realized_fpr</span>) and the
-        giant-component section of
-        <span class="mono">ml/experiments/ibm_aml/README.md</span>.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>Isolation Forest: unsupervised, no labels -- beats the rule on a slow pattern, loses to XGBoost everywhere</h4>
-      <p>An unlabelled anomaly detector, never shown which accounts are mules,
-        given a 1%-per-bank alert budget. Tested on two worlds: the canonical
-        dataset, and a separate "slow-drip" overlay built to evade the
-        shipped velocity rule (smaller amounts, hops paced just under its
-        speed ceiling). On slow-drip, cross-bank: Isolation Forest catches
-        60.0% of rings against the velocity rule's 67.5% and XGBoost's
-        89.2% -- it beats the rule single-bank (41.7% vs 10.8%) but trails
-        XGBoost everywhere, in both worlds, by double digits. <b>Not a
-        general detector of unseen fraud</b> -- it was measured against one
-        designed pattern, not fraud nobody anticipated, and it is not
-        deployed: the shipped rule and models are unchanged. See
-        <span class="mono">docs/claims.md</span>'s "Slow-drip stress test"
-        section and <span class="mono">ml/experiments/slow_drip/run.py</span>.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>GNN + XGBoost: a modest gain, not shipped</h4>
-      <p>An inductively-trained graph neural network (test accounts and
-        their edges fully absent during training), combined with XGBoost by
-        simple score averaging, reaches 0.6654 T=5m PR-AUC against XGBoost
-        alone's 0.6212 -- +0.044 absolute, about 7% relative. Measured
-        honestly on a merged experiment branch; <b>the shipped detector is
-        unchanged</b> -- nothing here is registered in Vertex or wired into
-        the live app. See <span class="mono">docs/claims.md</span>
-        (<span class="mono">gnn_xgb_t5_score_averaging</span>) and
-        <span class="mono">ml/experiments/gnn_xgb/README.md</span>.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>Adversarial retraining: inconclusive</h4>
-      <p>Retraining a copy of Model A on self-generated evasion strategies
-        looked like it caught held-out strategies, surviving two confound
-        controls. It didn't survive a third: the retrained model also
-        flagged most benign synthetic accounts it was explicitly told were
-        innocent, built by the same generator but never part of a ring. The
-        honest read is that retraining taught the model to recognise this
-        generator's structural fingerprint, not the targeted evasion
-        behaviour -- so the result is inconclusive, not evidence of
-        robustness. Not merged, not deployed; this is not a claim in
-        <span class="mono">docs/claims.md</span>, by design. See the
-        <span class="mono">exp/adversarial</span> branch,
-        <span class="mono">ml/experiments/adversarial/README.md</span>, and
-        <span class="mono">docs/EVIDENCE.md</span>.</p>
-    </div>
-
-    <div class="ev-card">
-      <h4>False alerts stay flat as more banks join (N=3, 5, 6)</h4>
-      <p>Scaling the simulator to 5- and 6-bank worlds, the
-        flagged-accounts-per-ring-caught ratio at full join is 5.63 (N=3,
-        shipped), 5.32 (N=5), 5.28 (N=6) -- flat to mildly improving, not
-        rising, as more banks join. Ring recall itself keeps climbing to
-        100% once every bank has joined, for N=5 and N=6 exactly as for
-        N=3 -- the join effect is not a 3-bank artifact. Still
-        synthetic-world only; not yet validated against real additional
-        banks. See <span class="mono">ml/experiments/n_banks/README.md</span>.</p>
-    </div>
-
-    <div class="ev-card">
       <h4>Still to do: connect our ID-document checker to the live app</h4>
       <p>We built and tested a tool that reads KYC documents (ID proofs)
         and checks them automatically: address correct on 50/50 test
         documents, document number correct on 48/50, name correct on
         46/50. It works, but it isn't wired into the running app yet.</p>
+    </div>
+
+    <h3 style="font-size:12px;margin:14px 0 6px">Longer-term detection research</h3>
+
+    <div class="ev-card">
+      <h4>Still to do: catch fraud patterns we haven't seen before</h4>
+      <p>Every detector that's actually <b>shipped</b> -- the velocity rule and
+        both trained XGBoost models -- is <b>supervised</b>: trained or tuned
+        against labelled examples of the specific pass-through pattern this
+        dataset's ground truth defines. None of them can recognise a
+        genuinely novel fraud pattern that looks nothing like anything in
+        that label set. We tested one unsupervised anomaly-detection method,
+        Isolation Forest (see "Additional experiments" above) -- it beat the
+        rule on one designed slow pattern but trailed XGBoost everywhere and
+        is not deployed, so it does not close this gap today. This remains a
+        real limitation of the shipped detection approach, not an
+        implementation gap to be filled in later without rethinking the
+        approach itself.</p>
     </div>
 
     <div class="ev-card">
