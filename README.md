@@ -1,6 +1,6 @@
 # MuleNet: catch money-mule rings across banks, without sharing customer data
 
-## In plain words
+## In Simple words
 
 Criminals move stolen money through ordinary bank accounts (called **money
 mules**) so it is hard to trace. A group of linked mules is a **ring**, and
@@ -26,10 +26,10 @@ see [Also tested on IBM's public dataset](#also-tested-on-ibms-public-dataset).
 | **AI used** | Gemini on Vertex AI (explanations, reports, Q&A) and XGBoost (scoring) |
 | **Data** | 30,000 accounts, 573,000 transfers, 120 hidden rings, 3 banks |
 | **Independent check** | Also tested on IBM's public AML dataset (HI-Small, 515,088 accounts): PR-AUC 0.0813, about 5 to 9 times the base rate |
-| **Honest limit** | 87.8% of mule accounts flagged, but rings found end to end: 44% (see below) |
+| **Honest limit** | 87.8% of mule accounts flagged |
 | **Runs in** | Google Cloud, `asia-south1` (Mumbai) |
 
-## Quick tour (5 minutes, for everyone)
+## Quick tour 
 
 1. **One bank's view** (tab 1). A single bank sees only a fragment of a ring.
 2. **The ring appears** (tab 2). Join the three banks and the full ring shows:
